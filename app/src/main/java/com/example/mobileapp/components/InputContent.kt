@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mobileapp.ui.theme.MobileAppTheme
@@ -29,6 +30,25 @@ fun PlaceholderInputField(label: String){
         placeholder = {
             Text(label)
         },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp))
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun PasswordInputField(label: String){
+    var text = remember { mutableStateOf("") }
+
+    OutlinedTextField(
+        value = text.value,
+        onValueChange = {
+            text.value = it
+        },
+        placeholder = {
+            Text(label)
+        },
+        visualTransformation = PasswordVisualTransformation(),
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp))

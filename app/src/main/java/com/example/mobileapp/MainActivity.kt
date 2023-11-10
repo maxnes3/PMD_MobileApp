@@ -15,9 +15,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mobileapp.screens.Authorization
 import com.example.mobileapp.screens.ListDataScreen
-import com.example.mobileapp.screens.MailScreen
+import com.example.mobileapp.screens.ListMailScreen
 import com.example.mobileapp.screens.MainScreen
 import com.example.mobileapp.screens.Registration
+import com.example.mobileapp.screens.SettingsScreen
 import com.example.mobileapp.ui.theme.MobileAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -56,7 +57,10 @@ fun AppNavigation(navController: NavHostController){
             ListDataScreen(navController = navController)
         }
         composable("mail"){
-            MailScreen(navController = navController)
+            ListMailScreen(navController = navController)
+        }
+        composable("settings"){
+            SettingsScreen(navController = navController)
         }
     }
 }

@@ -12,6 +12,6 @@ fun EditScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
-        NavBar(navController = navController)
+
     }
 }

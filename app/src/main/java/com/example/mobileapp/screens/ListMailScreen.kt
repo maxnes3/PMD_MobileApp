@@ -11,13 +11,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import com.example.mobileapp.components.DataListScroll
+import com.example.mobileapp.components.MailListScroll
 import com.example.mobileapp.components.NavBar
 import com.example.mobileapp.ui.theme.BackgroundItem1
-import com.example.mobileapp.ui.theme.ButtonColor1
 
 @Composable
-fun ListDataScreen(navController: NavHostController){
+fun ListMailScreen(navController: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -28,7 +27,7 @@ fun ListDataScreen(navController: NavHostController){
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
         ){
-            DataListScroll()
+            MailListScroll()
         }
         Column(
             modifier = Modifier

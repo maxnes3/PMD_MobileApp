@@ -1,7 +1,9 @@
 package com.example.mobileapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -23,7 +25,7 @@ import com.example.mobileapp.R
 import com.example.mobileapp.components.NavBar
 
 @Composable
-fun MainScreen(navController: NavHostController) {
+fun SettingsScreen(navController: NavHostController){
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -34,17 +36,16 @@ fun MainScreen(navController: NavHostController) {
                 .fillMaxHeight(0.9f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        ){
             Image(
-                painter = painterResource(id = R.drawable.main),
-                contentDescription = "main",
+                painter = painterResource(id = R.drawable.settingsplaceholder),
+                contentDescription = "settings",
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(512.dp)
-                    .padding(8.dp)
-            )
+                    .padding(8.dp))
             Text(
-                text = "Здесь будут посты авторов",
+                text = "Здесь будут настройки приложения",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
             )
