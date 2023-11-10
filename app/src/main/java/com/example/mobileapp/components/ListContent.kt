@@ -34,24 +34,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
 import com.example.mobileapp.entities.Mail
+import com.example.mobileapp.entities.MailSingleton
 import com.example.mobileapp.entities.Story
+import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 
 @Composable
 fun DataListScroll(){
+    val storySingleton = StorySingleton()
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
     ){
         items(
-            listOf(
-                Story(0, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king),
-                Story(1, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun),
-                Story(2, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king),
-                Story(3, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun),
-            )
+            storySingleton.getStoryList()
         ){ item ->
             DataListItem(item = item)
         }
@@ -138,24 +137,15 @@ fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color){
 
 @Composable
 fun MailListScroll(){
+    val mailSingleton = MailSingleton()
+
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
     ){
         items(
-            listOf(
-                Mail(0, 0, "Дзюнзи Ито", "Выложил новый"),
-                Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"),
-                Mail(0, 0, "Дзюнзи Ито", "Выложил новый"),
-                Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"),
-                Mail(0, 0, "Дзюнзи Ито", "Выложил новый"),
-                Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"),
-                Mail(0, 0, "Дзюнзи Ито", "Выложил новый"),
-                Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"),
-                Mail(0, 0, "Дзюнзи Ито", "Выложил новый"),
-                Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере")
-            )
+            mailSingleton.getMailList()
         ){ item ->
             MailListItem(item = item)
         }

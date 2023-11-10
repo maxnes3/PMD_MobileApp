@@ -13,6 +13,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.mobileapp.entities.Mail
+import com.example.mobileapp.entities.MailSingleton
+import com.example.mobileapp.entities.Story
+import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.screens.Authorization
 import com.example.mobileapp.screens.ListDataScreen
 import com.example.mobileapp.screens.ListMailScreen
@@ -32,6 +36,22 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
+                    val mailSingleton = MailSingleton()
+                    mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
+                    mailSingleton.addMail(Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"))
+                    mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
+                    mailSingleton.addMail(Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"))
+                    mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
+                    mailSingleton.addMail(Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"))
+                    mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
+                    mailSingleton.addMail(Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"))
+
+                    val storySingleton = StorySingleton()
+                    storySingleton.addStory(Story(0, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king))
+                    storySingleton.addStory(Story(1, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun))
+                    storySingleton.addStory(Story(2, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king))
+                    storySingleton.addStory(Story(3, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun))
+
                     AppNavigation(navController = navController)
                 }
             }
