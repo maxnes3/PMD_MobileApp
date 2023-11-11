@@ -39,7 +39,7 @@ fun EditStoryScreen(navController: NavHostController) {
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally))
         PlaceholderInputField(label = "Название")
-        ActiveButton(label = "Выбрать обложку", backgroundColor = ButtonColor1, textColor = Color.Black)
+        ActiveButton(label = "Выбрать обложку", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {})
         PlaceholderInputField(label = "Описание")
         NavigationButton(navController = navController, destination = "listdata", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)

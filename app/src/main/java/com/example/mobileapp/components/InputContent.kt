@@ -1,5 +1,6 @@
 package com.example.mobileapp.components
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,6 +21,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -95,11 +97,41 @@ fun SearchInputField(){
 }
 
 @Composable
-fun ActiveButton(label: String, backgroundColor: Color, textColor: Color){
+fun IconButton(iconLeft: ImageVector, label: String, backgroundColor: Color, textColor: Color, onClickAction: () -> Unit){
     Button(
-        onClick = {
+        onClick = onClickAction,
+        modifier = Modifier
+            .fillMaxWidth()
+            .requiredHeight(64.dp)
+            .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = backgroundColor
+        ),
+        shape = RoundedCornerShape(10.dp)
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth()
+        ){
+            Icon(
+                imageVector = iconLeft,
+                contentDescription = "",
+                tint = textColor
+            )
+            Text(
+                text = label,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                color = textColor,
+                modifier = Modifier.padding(start = 16.dp)
+            )
+        }
+    }
+}
 
-        },
+@Composable
+fun ActiveButton(label: String, backgroundColor: Color, textColor: Color, onClickAction: () -> Unit){
+    Button(
+        onClick = onClickAction,
         modifier = Modifier
             .fillMaxWidth()
             .requiredHeight(64.dp)

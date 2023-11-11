@@ -57,13 +57,13 @@ fun DataListScroll(navController: NavHostController){
             addNewListItem(navController, "editstory")
         }
         items(storySingleton.getStoryList()){ item ->
-            DataListItem(item = item)
+            DataListItem(item = item, navController = navController)
         }
     }
 }
 
 @Composable
-fun DataListItem(item: Story){
+fun DataListItem(item: Story, navController: NavHostController){
     val isExpanded = remember {
         mutableStateOf(false)
     }
@@ -114,8 +114,8 @@ fun DataListItem(item: Story){
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ){
-                    DataListItemButton(label = "Изменить", ButtonColor2, Color.White)
-                    DataListItemButton(label = "Удалить", Color.Red, Color.White)
+                    DataListItemButton("Изменить", ButtonColor2, Color.White, onClickAction = { navController.navigate("editstory") })
+                    DataListItemButton("Удалить", Color.Red, Color.White, onClickAction = { })
                 }
             }
         }
@@ -123,9 +123,9 @@ fun DataListItem(item: Story){
 }
 
 @Composable
-fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color){
+fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color, onClickAction: () -> Unit){
     Button(
-        onClick = { /* Действие при нажатии кнопки */ },
+        onClick = onClickAction,
         modifier = Modifier.requiredHeight(64.dp),
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(
