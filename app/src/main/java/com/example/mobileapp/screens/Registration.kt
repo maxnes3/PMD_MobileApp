@@ -1,6 +1,7 @@
 package com.example.mobileapp.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -23,7 +24,10 @@ import com.example.mobileapp.ui.theme.ButtonColor2
 @Composable
 fun Registration(navController: NavHostController){
     Column(
-        modifier = Modifier.fillMaxSize().padding(bottom = 8.dp)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 8.dp),
+        verticalArrangement = Arrangement.Bottom
     ) {
         Image(
             painter = painterResource(id = R.drawable.registration),
