@@ -33,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.mobileapp.R
 import com.example.mobileapp.entities.Mail
 import com.example.mobileapp.entities.MailSingleton
@@ -43,7 +44,7 @@ import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 
 @Composable
-fun DataListScroll(){
+fun DataListScroll(navController: NavHostController){
     val storySingleton = StorySingleton()
     val isFirstTime = remember { mutableStateOf(true) }
 
@@ -53,7 +54,7 @@ fun DataListScroll(){
             .fillMaxWidth()
     ){
         item {
-            addNewListItem()
+            addNewListItem(navController, "editstory")
         }
         items(storySingleton.getStoryList()){ item ->
             DataListItem(item = item)
@@ -140,7 +141,7 @@ fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color){
 }
 
 @Composable
-fun MailListScroll(){
+fun MailListScroll(navController: NavHostController){
     val mailSingleton = MailSingleton()
 
     LazyColumn(
@@ -149,7 +150,7 @@ fun MailListScroll(){
             .fillMaxWidth()
     ){
         item {
-            addNewListItem()
+            addNewListItem(navController, "editmail")
         }
         items(mailSingleton.getMailList()){ item ->
             MailListItem(item = item)
@@ -225,15 +226,14 @@ fun MailListItem(item: Mail){
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-fun addNewListItem(){
+fun addNewListItem(navController: NavHostController, destination: String){
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(start = 18.dp, top = 8.dp, end = 18.dp, bottom = 8.dp)
             .clickable {
-
+                navController.navigate(destination)
             },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(

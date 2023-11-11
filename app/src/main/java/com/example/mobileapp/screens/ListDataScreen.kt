@@ -27,7 +27,7 @@ fun ListDataScreen(navController: NavHostController){
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
         ){
-            DataListScroll()
+            DataListScroll(navController)
         }
         Column(
             modifier = Modifier

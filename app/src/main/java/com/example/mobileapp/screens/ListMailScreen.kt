@@ -27,7 +27,7 @@ fun ListMailScreen(navController: NavHostController){
                 .fillMaxWidth()
                 .fillMaxHeight(0.9f)
         ){
-            MailListScroll()
+            MailListScroll(navController)
         }
         Column(
             modifier = Modifier

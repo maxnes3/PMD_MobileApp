@@ -18,6 +18,8 @@ import com.example.mobileapp.entities.MailSingleton
 import com.example.mobileapp.entities.Story
 import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.screens.Authorization
+import com.example.mobileapp.screens.EditMailScreen
+import com.example.mobileapp.screens.EditStoryScreen
 import com.example.mobileapp.screens.ListDataScreen
 import com.example.mobileapp.screens.ListMailScreen
 import com.example.mobileapp.screens.MainScreen
@@ -81,6 +83,12 @@ fun AppNavigation(navController: NavHostController){
         }
         composable("settings"){
             SettingsScreen(navController = navController)
+        }
+        composable("editstory"){
+            EditStoryScreen(navController = navController)
+        }
+        composable("editmail"){
+            EditMailScreen(navController = navController)
         }
     }
 }

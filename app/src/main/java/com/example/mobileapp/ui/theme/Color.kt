@@ -10,6 +10,7 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
+//Мои кастомная палитра
 val BackgroundItem1 = Color(0xff3a425d)
 val BackgroundItem2 = Color(0xffe4ecfc)
 val ButtonColor1 = Color(0xffb8d0e0)
