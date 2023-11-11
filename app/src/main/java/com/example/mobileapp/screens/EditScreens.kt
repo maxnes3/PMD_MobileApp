@@ -27,7 +27,8 @@ fun EditStoryScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
+        verticalArrangement = Arrangement.Bottom
     ) {
         Image(
             painter = painterResource(id = R.drawable.editplaceholder),
@@ -50,7 +51,8 @@ fun EditMailScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 8.dp)
+            .padding(bottom = 8.dp),
+        verticalArrangement = Arrangement.Center
     ) {
         Image(
             painter = painterResource(id = R.drawable.mailplaceholder),
