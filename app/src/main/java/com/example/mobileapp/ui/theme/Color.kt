@@ -11,6 +11,6 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val BackgroundItem1 = Color(0xff3a425d)
-val BackgroundItem2 = Color(0xff7b5a94)
+val BackgroundItem2 = Color(0xffe4ecfc)
 val ButtonColor1 = Color(0xffb8d0e0)
 val ButtonColor2 = Color(0xff3193cd)

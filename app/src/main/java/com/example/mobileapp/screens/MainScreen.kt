@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mobileapp.R
 import com.example.mobileapp.components.NavBar
+import com.example.mobileapp.components.SearchInputField
 
 @Composable
 fun MainScreen(navController: NavHostController) {
@@ -28,10 +29,11 @@ fun MainScreen(navController: NavHostController) {
         modifier = Modifier
             .fillMaxSize()
     ) {
+        SearchInputField()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight(0.9f),
+                .fillMaxHeight(0.89f),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {

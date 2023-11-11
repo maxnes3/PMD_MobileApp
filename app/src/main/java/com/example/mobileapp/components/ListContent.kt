@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mobileapp.R
@@ -37,21 +38,24 @@ import com.example.mobileapp.entities.Mail
 import com.example.mobileapp.entities.MailSingleton
 import com.example.mobileapp.entities.Story
 import com.example.mobileapp.entities.StorySingleton
+import com.example.mobileapp.ui.theme.BackgroundItem2
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 
 @Composable
 fun DataListScroll(){
     val storySingleton = StorySingleton()
+    val isFirstTime = remember { mutableStateOf(true) }
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
     ){
-        items(
-            storySingleton.getStoryList()
-        ){ item ->
+        item {
+            addNewListItem()
+        }
+        items(storySingleton.getStoryList()){ item ->
             DataListItem(item = item)
         }
     }
@@ -144,9 +148,10 @@ fun MailListScroll(){
         modifier = Modifier
             .fillMaxWidth()
     ){
-        items(
-            mailSingleton.getMailList()
-        ){ item ->
+        item {
+            addNewListItem()
+        }
+        items(mailSingleton.getMailList()){ item ->
             MailListItem(item = item)
         }
     }
@@ -215,6 +220,47 @@ fun MailListItem(item: Mail){
                         fontSize = 18.sp,
                     )
                 }
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun addNewListItem(){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 18.dp, top = 8.dp, end = 18.dp, bottom = 8.dp)
+            .clickable {
+
+            },
+        shape = RoundedCornerShape(15.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = BackgroundItem2
+        ),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 8.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Image(painter = painterResource(id = R.drawable.additem),
+                    contentDescription = "additem",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(96.dp)
+                        .padding(8.dp))
+                Text(
+                    text = "Добавить",
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(start = 32.dp))
             }
         }
     }

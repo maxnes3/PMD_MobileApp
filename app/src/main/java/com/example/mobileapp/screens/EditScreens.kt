@@ -5,10 +5,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
-import com.example.mobileapp.components.NavBar
 
 @Composable
-fun EditScreen(navController: NavHostController) {
+fun EditStoryScreen(navController: NavHostController) {
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+    }
+}
+
+@Composable
+fun EditMailScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {

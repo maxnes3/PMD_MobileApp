@@ -9,11 +9,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import com.example.mobileapp.components.MailListScroll
 import com.example.mobileapp.components.NavBar
 import com.example.mobileapp.ui.theme.BackgroundItem1
+import com.example.mobileapp.ui.theme.BackgroundItem2
 
 @Composable
 fun ListMailScreen(navController: NavHostController){
@@ -34,7 +34,7 @@ fun ListMailScreen(navController: NavHostController){
                 .fillMaxSize(),
             verticalArrangement = Arrangement.Center
         ) {
-            NavBar(navController = navController, itemColorFilter = Color.White)
+            NavBar(navController = navController, itemColorFilter = BackgroundItem2)
         }
     }
 }
