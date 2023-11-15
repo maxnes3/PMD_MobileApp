@@ -46,7 +46,6 @@ import com.example.mobileapp.ui.theme.ButtonColor2
 @Composable
 fun DataListScroll(navController: NavHostController){
     val storySingleton = StorySingleton()
-    val isFirstTime = remember { mutableStateOf(true) }
 
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
