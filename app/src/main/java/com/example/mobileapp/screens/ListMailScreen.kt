@@ -22,19 +22,6 @@ fun ListMailScreen(navController: NavHostController){
             .fillMaxSize()
             .background(BackgroundItem1)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
-        ){
-            MailListScroll(navController)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            NavBar(navController = navController, itemColorFilter = BackgroundItem2)
-        }
+        MailListScroll(navController)
     }
 }

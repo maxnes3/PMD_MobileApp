@@ -22,19 +22,6 @@ fun ListDataScreen(navController: NavHostController){
             .fillMaxSize()
             .background(BackgroundItem1)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f)
-        ){
-            DataListScroll(navController)
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            NavBar(navController = navController, itemColorFilter = BackgroundItem2)
-        }
+        DataListScroll(navController)
     }
 }

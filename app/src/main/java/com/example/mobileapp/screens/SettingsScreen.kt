@@ -37,39 +37,26 @@ import com.example.mobileapp.ui.theme.ButtonColor2
 fun SettingsScreen(navController: NavHostController){
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Top,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Column(
+        Image(
+            painter = painterResource(id = R.drawable.settingsplaceholder),
+            contentDescription = "settings",
+            contentScale = ContentScale.Crop,
             modifier = Modifier
-                .fillMaxWidth()
-                .fillMaxHeight(0.9f),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Image(
-                painter = painterResource(id = R.drawable.settingsplaceholder),
-                contentDescription = "settings",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(384.dp)
-                    .padding(8.dp))
-            IconButton(iconLeft = Icons.Default.AccountCircle, label = "Учётная запись",
-                backgroundColor = ButtonColor2, textColor = Color.White, onClickAction = { })
-            IconButton(iconLeft = Icons.Default.Face, label = "Внешний вид",
-                backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
-            IconButton(iconLeft = Icons.Default.Share, label = "Контакты",
-                backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
-            IconButton(iconLeft = Icons.Default.Info, label = "О приложении",
-                backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
-            IconButton(iconLeft = Icons.Default.ExitToApp, label = "Выйти",
-                backgroundColor = Color.Red, textColor = Color.White, onClickAction = { })
-        }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            NavBar(navController = navController, itemColorFilter = Color.Black)
-        }
+                .size(384.dp)
+                .padding(8.dp))
+        IconButton(iconLeft = Icons.Default.AccountCircle, label = "Учётная запись",
+            backgroundColor = ButtonColor2, textColor = Color.White, onClickAction = { })
+        IconButton(iconLeft = Icons.Default.Face, label = "Внешний вид",
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+        IconButton(iconLeft = Icons.Default.Share, label = "Контакты",
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+        IconButton(iconLeft = Icons.Default.Info, label = "О приложении",
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+        IconButton(iconLeft = Icons.Default.ExitToApp, label = "Выйти",
+            backgroundColor = Color.Red, textColor = Color.White, onClickAction = { })
     }
 }

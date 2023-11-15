@@ -51,12 +51,5 @@ fun MainScreen(navController: NavHostController) {
                 fontWeight = FontWeight.Bold
             )
         }
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.Center
-        ) {
-            NavBar(navController = navController, itemColorFilter = Color.Black)
-        }
     }
 }
