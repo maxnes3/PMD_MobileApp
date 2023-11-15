@@ -140,7 +140,7 @@ fun NavigationButton(navController: NavHostController,
         },
         modifier = Modifier
             .fillMaxWidth()
-            .requiredHeight(64.dp)
+            .requiredHeight(72.dp)
             .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor

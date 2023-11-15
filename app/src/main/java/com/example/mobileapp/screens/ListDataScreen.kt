@@ -12,16 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import com.example.mobileapp.components.DataListScroll
 import com.example.mobileapp.components.NavBar
+import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.ui.theme.BackgroundItem1
 import com.example.mobileapp.ui.theme.BackgroundItem2
 
 @Composable
 fun ListDataScreen(navController: NavHostController){
+    val storySingleton = StorySingleton()
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundItem1)
     ) {
-        DataListScroll(navController)
+        DataListScroll(navController, storySingleton.getStoryList())
     }
 }

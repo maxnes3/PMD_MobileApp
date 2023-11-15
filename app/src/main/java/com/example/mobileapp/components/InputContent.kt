@@ -27,8 +27,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.example.mobileapp.ui.theme.MobileAppTheme
+
+val buttonHeightStandard = 72.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -102,7 +103,7 @@ fun IconButton(iconLeft: ImageVector, label: String, backgroundColor: Color, tex
         onClick = onClickAction,
         modifier = Modifier
             .fillMaxWidth()
-            .requiredHeight(64.dp)
+            .requiredHeight(buttonHeightStandard)
             .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor
@@ -134,7 +135,7 @@ fun ActiveButton(label: String, backgroundColor: Color, textColor: Color, onClic
         onClick = onClickAction,
         modifier = Modifier
             .fillMaxWidth()
-            .requiredHeight(64.dp)
+            .requiredHeight(buttonHeightStandard)
             .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = backgroundColor

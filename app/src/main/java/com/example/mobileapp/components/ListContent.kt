@@ -44,25 +44,29 @@ import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 
 @Composable
-fun DataListScroll(navController: NavHostController){
-    val storySingleton = StorySingleton()
-
+fun <T : Any> DataListScroll(navController: NavHostController, dataList: List<T>){
     LazyColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxWidth()
     ){
         item {
-            addNewListItem(navController, "editstory")
+            when(dataList[0]){
+                is Story -> addNewListItem(navController, "editstory")
+                is Mail -> addNewListItem(navController, "editmail")
+            }
         }
-        items(storySingleton.getStoryList()){ item ->
-            DataListItem(item = item, navController = navController)
+        items(dataList){ item ->
+            when(item){
+                is Story -> StoryListItem(item = item, navController = navController)
+                is Mail -> MailListItem(item = item)
+            }
         }
     }
 }
 
 @Composable
-fun DataListItem(item: Story, navController: NavHostController){
+fun StoryListItem(item: Story, navController: NavHostController){
     val isExpanded = remember {
         mutableStateOf(false)
     }
