@@ -144,24 +144,6 @@ fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color, 
 }
 
 @Composable
-fun MailListScroll(navController: NavHostController){
-    val mailSingleton = MailSingleton()
-
-    LazyColumn(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .fillMaxWidth()
-    ){
-        item {
-            addNewListItem(navController, "editmail")
-        }
-        items(mailSingleton.getMailList()){ item ->
-            MailListItem(item = item)
-        }
-    }
-}
-
-@Composable
 fun MailListItem(item: Mail){
     val isExpanded = remember {
         mutableStateOf(false)

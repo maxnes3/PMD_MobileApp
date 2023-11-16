@@ -35,12 +35,13 @@ fun EditStoryScreen(navController: NavHostController) {
             contentDescription = "editplaceholder",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(512.dp)
+                .size(384.dp)
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally))
-        PlaceholderInputField(label = "Название")
+        PlaceholderInputField(label = "Название", true)
         ActiveButton(label = "Выбрать обложку", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {})
-        PlaceholderInputField(label = "Описание")
+        PlaceholderInputField(label = "Описание", true)
+        ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {})
         NavigationButton(navController = navController, destination = "listdata", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)
     }
@@ -62,8 +63,8 @@ fun EditMailScreen(navController: NavHostController) {
                 .size(512.dp)
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally))
-        PlaceholderInputField(label = "Заголовок")
-        PlaceholderInputField(label = "Текс поста")
+        PlaceholderInputField(label = "Текс поста", false)
+        ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {})
         NavigationButton(navController = navController, destination = "mail", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)
     }

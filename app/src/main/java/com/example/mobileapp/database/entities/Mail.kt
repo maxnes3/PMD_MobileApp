@@ -19,7 +19,7 @@ import androidx.room.PrimaryKey
 )
 data class Mail(
     @PrimaryKey(autoGenerate = true)
-    var id: Int?,
+    var id: Int? = null,
     @ColumnInfo(name = "message")
     val message: String,
     @ColumnInfo(name="user_id")

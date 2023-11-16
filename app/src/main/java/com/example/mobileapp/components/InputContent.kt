@@ -33,7 +33,7 @@ val buttonHeightStandard = 72.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PlaceholderInputField(label: String){
+fun PlaceholderInputField(label: String, isSingleLine: Boolean){
     var text = remember { mutableStateOf("") }
 
     OutlinedTextField(
@@ -47,7 +47,9 @@ fun PlaceholderInputField(label: String){
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 8.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
-        shape = RoundedCornerShape(10.dp))
+        shape = RoundedCornerShape(10.dp),
+        singleLine = isSingleLine
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -93,7 +95,8 @@ fun SearchInputField(){
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 16.dp, start = 16.dp, bottom = 8.dp, end = 16.dp),
-        shape = RoundedCornerShape(10.dp)
+        shape = RoundedCornerShape(10.dp),
+        singleLine = true
     )
 }
 
@@ -156,7 +159,7 @@ fun ActiveButton(label: String, backgroundColor: Color, textColor: Color, onClic
 fun PlaceholderTextFieldPreview() {
     MobileAppTheme {
         Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-            PlaceholderInputField("Email")
+            PlaceholderInputField("Email", true)
         }
     }
 }

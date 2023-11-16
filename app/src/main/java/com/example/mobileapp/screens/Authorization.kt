@@ -37,7 +37,7 @@ fun Authorization(navController: NavHostController){
                 .size(512.dp)
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally))
-        PlaceholderInputField(label = "Логин")
+        PlaceholderInputField(label = "Логин", true)
         PasswordInputField(label = "Пароль")
         NavigationButton(navController = navController, destination = "main", label = "Вход",
             backgroundColor = ButtonColor2, textColor = Color.White)

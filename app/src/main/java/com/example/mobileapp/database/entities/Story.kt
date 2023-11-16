@@ -20,7 +20,7 @@ import androidx.room.PrimaryKey
 )
 data class Story(
     @PrimaryKey(autoGenerate = true)
-    val id: Int?,
+    val id: Int? = null,
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "description")

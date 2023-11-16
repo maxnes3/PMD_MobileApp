@@ -57,6 +57,6 @@ fun SettingsScreen(navController: NavHostController){
         IconButton(iconLeft = Icons.Default.Info, label = "О приложении",
             backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
         IconButton(iconLeft = Icons.Default.ExitToApp, label = "Выйти",
-            backgroundColor = Color.Red, textColor = Color.White, onClickAction = { })
+            backgroundColor = Color.Red, textColor = Color.White, onClickAction = { navController.navigate("") })
     }
 }
