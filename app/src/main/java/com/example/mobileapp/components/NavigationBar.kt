@@ -118,9 +118,17 @@ fun NavBar(navController: NavHostController) {
                 SettingsScreen(navController = navController)
                 bottomBarState.value = true
             }
+            composable("editstory"){ // Без аргумента
+                EditStoryScreen(navController = navController)
+                bottomBarState.value = false
+            }
             composable("editstory/{storyId}"){ navBackStackEntry ->
                 val storyId = navBackStackEntry.arguments?.getInt("storyId")
                 EditStoryScreen(navController = navController, storyId = storyId)
+                bottomBarState.value = false
+            }
+            composable("editmail"){ // Без аргумента
+                EditMailScreen(navController = navController)
                 bottomBarState.value = false
             }
             composable("editmail/{mailId}"){ navBackStackEntry ->

@@ -40,6 +40,7 @@ import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.ui.theme.BackgroundItem2
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
+import kotlin.reflect.typeOf
 
 @Composable
 fun <T : Any> DataListScroll(navController: NavHostController, dataList: List<T>){
@@ -49,9 +50,9 @@ fun <T : Any> DataListScroll(navController: NavHostController, dataList: List<T>
             .fillMaxWidth()
     ){
         item {
-            when(dataList[0]){
-                is Story -> addNewListItem(navController, "editstory")
-                is Mail -> addNewListItem(navController, "editmail")
+            when {
+                dataList.isListOf<Story>() -> addNewListItem(navController, "editstory")
+                dataList.isListOf<Mail>() -> addNewListItem(navController, "editmail")
             }
         }
         items(dataList){ item ->
@@ -61,6 +62,10 @@ fun <T : Any> DataListScroll(navController: NavHostController, dataList: List<T>
             }
         }
     }
+}
+
+inline fun <reified T> List<*>.isListOf(): Boolean {
+    return isNotEmpty() && all { it is T }
 }
 
 @Composable
