@@ -32,17 +32,17 @@ abstract class MobileAppDataBase : RoomDatabase() {
         @Volatile
         private var INSTANCE: MobileAppDataBase? = null
 
-        suspend fun initialDataBase(){
+        suspend fun initialDataBase(appContext: Context){
             INSTANCE?.let { database ->
                 val userDao = database.userDao()
                 userDao.insert(User(id = 1, login = "Дзюнзи Ито", password = "1234", email = "ito@gmail.com"))
                 userDao.insert(User(id = 2, login = "Стивен Кинг", password = "4321", email = "king@gmail.com"))
 
-                /*val storyDao = database.storyDao()
+                val storyDao = database.storyDao()
                 storyDao.insert(Story(title = "Переулок", description = "История ужасов от Дзюнзи Ито",
-                    cover = BitmapFactory.decodeResource(null, R.drawable.dzun), userId = 1))
+                    cover = BitmapFactory.decodeResource(appContext.resources, R.drawable.dzun), userId = 1))
                 storyDao.insert(Story(title = "Чужак", description = "Знаменитая книга стивена кинга",
-                    cover = BitmapFactory.decodeResource(null, R.drawable.king), userId = 2))*/
+                    cover = BitmapFactory.decodeResource(appContext.resources, R.drawable.king), userId = 2))
 
                 val mailDao = database.mailDao()
                 mailDao.insert(Mail(message = "Выложил новые страницы", userId = 1))
@@ -61,7 +61,7 @@ abstract class MobileAppDataBase : RoomDatabase() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             CoroutineScope(Dispatchers.IO).launch {
-                                initialDataBase()
+                                initialDataBase(appContext)
                             }
                         }
                     })

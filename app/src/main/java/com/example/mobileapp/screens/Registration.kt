@@ -37,8 +37,8 @@ fun Registration(navController: NavHostController){
                 .size(384.dp)
                 .padding(8.dp)
                 .align(Alignment.CenterHorizontally))
-        PlaceholderInputField(label = "Логин", true, onTextChanged = {})
-        PlaceholderInputField(label = "Email", true, onTextChanged = {})
+        PlaceholderInputField(label = "Логин", isSingleLine = true, onTextChanged = {})
+        PlaceholderInputField(label = "Email", isSingleLine = true, onTextChanged = {})
         PasswordInputField(label = "Пароль", onPasswordChanged = {})
         PasswordInputField(label = "Пароль ещё раз", onPasswordChanged = {})
         NavigationButton(navController = navController, destination = "main",

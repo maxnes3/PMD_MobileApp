@@ -26,13 +26,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
-    val database by lazy { MobileAppDataBase.getInstance(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.deleteDatabase("my-db")
-        CoroutineScope(Dispatchers.IO).launch {
-            MobileAppDataBase.initialDataBase()
-        }
         setContent {
             MobileAppTheme {
                 // A surface container using the 'background' color from the theme

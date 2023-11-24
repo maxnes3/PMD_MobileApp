@@ -28,8 +28,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.example.mobileapp.R
 import com.example.mobileapp.screens.Authorization
 import com.example.mobileapp.screens.EditMailScreen
@@ -122,18 +124,17 @@ fun NavBar(navController: NavHostController) {
                 EditStoryScreen(navController = navController)
                 bottomBarState.value = false
             }
-            composable("editstory/{storyId}"){ navBackStackEntry ->
-                val storyId = navBackStackEntry.arguments?.getInt("storyId")
-                EditStoryScreen(navController = navController, storyId = storyId)
-                bottomBarState.value = false
+            composable(
+                "editstory/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType })
+            ) { backStackEntry ->
+                backStackEntry.arguments?.let {
+                    EditStoryScreen(navController = navController, storyId = it.getInt("id"))
+                    bottomBarState.value = false
+                }
             }
             composable("editmail"){ // Без аргумента
                 EditMailScreen(navController = navController)
-                bottomBarState.value = false
-            }
-            composable("editmail/{mailId}"){ navBackStackEntry ->
-                val mailId = navBackStackEntry.arguments?.getInt("mailId")
-                EditMailScreen(navController = navController, mailId = mailId)
                 bottomBarState.value = false
             }
         }
