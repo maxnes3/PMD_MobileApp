@@ -42,7 +42,7 @@ import com.example.mobileapp.screens.SettingsScreen
 
 val navBarItems = listOf(
     NavBarItem(route = "main", label = "Главная", icon = R.drawable.home),
-    NavBarItem(route = "listdata", label = "Создание", icon = R.drawable.edit),
+    NavBarItem(route = "story", label = "Создание", icon = R.drawable.edit),
     NavBarItem(route = "mail", label = "Уведомления", icon = R.drawable.mail),
     NavBarItem(route = "settings", label = "Настройки", icon = R.drawable.settings),
 )
@@ -106,7 +106,7 @@ fun NavBar(navController: NavHostController) {
                 MainScreen(navController = navController)
                 bottomBarState.value = true
             }
-            composable("listdata"){
+            composable("story"){
                 ListDataScreen(navController = navController)
                 bottomBarState.value = true
             }
@@ -118,12 +118,14 @@ fun NavBar(navController: NavHostController) {
                 SettingsScreen(navController = navController)
                 bottomBarState.value = true
             }
-            composable("editstory"){
-                EditStoryScreen(navController = navController)
+            composable("editstory/{storyId}"){ navBackStackEntry ->
+                val storyId = navBackStackEntry.arguments?.getInt("storyId")
+                EditStoryScreen(navController = navController, storyId = storyId)
                 bottomBarState.value = false
             }
-            composable("editmail"){
-                EditMailScreen(navController = navController)
+            composable("editmail/{mailId}"){ navBackStackEntry ->
+                val mailId = navBackStackEntry.arguments?.getInt("mailId")
+                EditMailScreen(navController = navController, mailId = mailId)
                 bottomBarState.value = false
             }
         }

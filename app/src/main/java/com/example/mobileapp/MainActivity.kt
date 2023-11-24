@@ -15,15 +15,24 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mobileapp.components.NavBar
+import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.entities.Mail
 import com.example.mobileapp.entities.MailSingleton
 import com.example.mobileapp.entities.Story
 import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.ui.theme.MobileAppTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
+    val database by lazy { MobileAppDataBase.getInstance(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        this.deleteDatabase("mobileApp.db")
+        CoroutineScope(Dispatchers.IO).launch {
+            MobileAppDataBase.initialDataBase()
+        }
         setContent {
             MobileAppTheme {
                 // A surface container using the 'background' color from the theme
@@ -32,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    val mailSingleton = MailSingleton()
+                    /*val mailSingleton = MailSingleton()
                     mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
                     mailSingleton.addMail(Mail(1, 1, "Стивен Кинг", "Меня отменили в Твиттере"))
                     mailSingleton.addMail(Mail(0, 0, "Дзюнзи Ито", "Выложил новый"))
@@ -46,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     storySingleton.addStory(Story(0, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king))
                     storySingleton.addStory(Story(1, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun))
                     storySingleton.addStory(Story(2, "Чужак", "Знаменитая книга стивена кинга", R.drawable.king))
-                    storySingleton.addStory(Story(3, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun))
+                    storySingleton.addStory(Story(3, "Переулок", "История ужасов от Дзюнзи Ито", R.drawable.dzun))*/
 
                     NavBar(navController = navController)
                 }

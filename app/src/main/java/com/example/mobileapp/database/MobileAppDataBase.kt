@@ -1,11 +1,13 @@
 package com.example.mobileapp.database
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.mobileapp.R
 import com.example.mobileapp.database.dao.MailDao
 import com.example.mobileapp.database.dao.StoryDao
 import com.example.mobileapp.database.dao.UserDao
@@ -17,7 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Story::class, Mail::class], version = 1, exportSchema = false)
+@Database(entities = [User::class, Story::class, Mail::class], version = 4)
 @TypeConverters(Converters::class)
 abstract class MobileAppDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -30,6 +32,24 @@ abstract class MobileAppDataBase : RoomDatabase() {
         @Volatile
         private var INSTANCE: MobileAppDataBase? = null
 
+        suspend fun initialDataBase(){
+            INSTANCE?.let { database ->
+                val userDao = database.userDao()
+                userDao.insert(User(id = 1, login = "Дзюнзи Ито", password = "1234", email = "ito@gmail.com"))
+                userDao.insert(User(id = 2, login = "Стивен Кинг", password = "4321", email = "king@gmail.com"))
+
+                val storyDao = database.storyDao()
+                storyDao.insert(Story(title = "Переулок", description = "История ужасов от Дзюнзи Ито",
+                    cover = BitmapFactory.decodeResource(null, R.drawable.dzun), userId = 1))
+                storyDao.insert(Story(title = "Чужак", description = "Знаменитая книга стивена кинга",
+                    cover = BitmapFactory.decodeResource(null, R.drawable.king), userId = 2))
+
+                val mailDao = database.mailDao()
+                mailDao.insert(Mail(message = "Выложил новые страницы", userId = 1))
+                mailDao.insert(Mail(message = "Меня отменили в Твиттере", userId = 2))
+            }
+        }
+
         fun getInstance(appContext: Context): MobileAppDataBase {
             return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(
@@ -41,10 +61,11 @@ abstract class MobileAppDataBase : RoomDatabase() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
                             CoroutineScope(Dispatchers.IO).launch {
-                                //populateDatabase()
+                                initialDataBase()
                             }
                         }
                     })
+                    .fallbackToDestructiveMigration()
                     .build()
                     .also { INSTANCE = it }
             }

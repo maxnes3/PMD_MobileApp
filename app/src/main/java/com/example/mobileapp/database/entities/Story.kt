@@ -5,6 +5,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import java.util.Calendar
+import java.util.Date
 
 @Entity(
     tableName = "stories",
@@ -27,6 +29,8 @@ data class Story(
     val description: String,
     @ColumnInfo(name = "cover")
     val cover: Bitmap,
+    @ColumnInfo(name = "postdate")
+    val postdate: Long? = Date().time,
     @ColumnInfo(name="user_id")
     val userId: Int
 ){

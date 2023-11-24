@@ -27,18 +27,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mobileapp.R
-import com.example.mobileapp.entities.Mail
-import com.example.mobileapp.entities.MailSingleton
-import com.example.mobileapp.entities.Story
-import com.example.mobileapp.entities.StorySingleton
+import com.example.mobileapp.database.entities.Mail
+import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.ui.theme.BackgroundItem2
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
@@ -92,7 +90,7 @@ fun StoryListItem(item: Story, navController: NavHostController){
             Row(
                 verticalAlignment = Alignment.Top
             ){
-                Image(painter = painterResource(id = item.cover),
+                Image(bitmap = item.cover.asImageBitmap(),
                     contentDescription = item.description,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -117,8 +115,12 @@ fun StoryListItem(item: Story, navController: NavHostController){
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ){
-                    DataListItemButton("Изменить", ButtonColor2, Color.White, onClickAction = { navController.navigate("editstory") })
-                    DataListItemButton("Удалить", Color.Red, Color.White, onClickAction = { })
+                    DataListItemButton("Изменить", ButtonColor2, Color.White, onClickAction = {
+                        navController.navigate("editstory/" + item.id)
+                    })
+                    DataListItemButton("Удалить", Color.Red, Color.White, onClickAction = {
+                        navController.navigate("story")
+                    })
                 }
             }
         }
@@ -180,7 +182,7 @@ fun MailListItem(item: Mail){
                     modifier = Modifier.padding(8.dp)
                 ){
                     Text(
-                        text = item.username,
+                        text = "item.username",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold)
                     Text(text = item.message)
