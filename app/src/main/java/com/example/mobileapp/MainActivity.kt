@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
     val database by lazy { MobileAppDataBase.getInstance(this) }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.deleteDatabase("mobileApp.db")
+        this.deleteDatabase("my-db")
         CoroutineScope(Dispatchers.IO).launch {
             MobileAppDataBase.initialDataBase()
         }

@@ -19,7 +19,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [User::class, Story::class, Mail::class], version = 4)
+@Database(entities = [User::class, Story::class, Mail::class], version = 1, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class MobileAppDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao
@@ -27,7 +27,7 @@ abstract class MobileAppDataBase : RoomDatabase() {
     abstract fun mailDao(): MailDao
 
     companion object{
-        private const val DB_NAME: String = "mobileApp.db"
+        private const val DB_NAME: String = "my-db"
 
         @Volatile
         private var INSTANCE: MobileAppDataBase? = null
