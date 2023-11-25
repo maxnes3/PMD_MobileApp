@@ -36,6 +36,7 @@ import com.example.mobileapp.R
 import com.example.mobileapp.screens.Authorization
 import com.example.mobileapp.screens.EditMailScreen
 import com.example.mobileapp.screens.EditStoryScreen
+import com.example.mobileapp.screens.EditUserScreen
 import com.example.mobileapp.screens.ListDataScreen
 import com.example.mobileapp.screens.ListMailScreen
 import com.example.mobileapp.screens.MainScreen
@@ -97,45 +98,49 @@ fun NavBar(navController: NavHostController) {
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable("authorization"){
-                Authorization(navController = navController)
                 bottomBarState.value = false
+                Authorization(navController = navController)
             }
             composable("registration"){
-                Registration(navController = navController)
                 bottomBarState.value = false
+                Registration(navController = navController)
             }
             composable("main"){
-                MainScreen(navController = navController)
                 bottomBarState.value = true
+                MainScreen(navController = navController)
             }
             composable("story"){
-                ListDataScreen(navController = navController)
                 bottomBarState.value = true
+                ListDataScreen(navController = navController)
             }
             composable("mail"){
-                ListMailScreen(navController = navController)
                 bottomBarState.value = true
+                ListMailScreen(navController = navController)
             }
             composable("settings"){
-                SettingsScreen(navController = navController)
                 bottomBarState.value = true
+                SettingsScreen(navController = navController)
             }
             composable("editstory"){ // Без аргумента
-                EditStoryScreen(navController = navController)
                 bottomBarState.value = false
+                EditStoryScreen(navController = navController)
             }
             composable(
                 "editstory/{id}",
-                arguments = listOf(navArgument("id") { type = NavType.IntType })
+                arguments = listOf(navArgument("id") { type = NavType.IntType }) //С аргументом
             ) { backStackEntry ->
                 backStackEntry.arguments?.let {
-                    EditStoryScreen(navController = navController, storyId = it.getInt("id"))
                     bottomBarState.value = false
+                    EditStoryScreen(navController = navController, storyId = it.getInt("id"))
                 }
             }
             composable("editmail"){ // Без аргумента
-                EditMailScreen(navController = navController)
                 bottomBarState.value = false
+                EditMailScreen(navController = navController)
+            }
+            composable("edituser"){
+                bottomBarState.value = false
+                EditUserScreen(navController = navController)
             }
         }
     }

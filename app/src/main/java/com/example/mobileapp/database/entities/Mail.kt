@@ -4,7 +4,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import java.util.Calendar
 import java.util.Date
 
 @Entity(
@@ -21,7 +20,7 @@ import java.util.Date
 )
 data class Mail(
     @PrimaryKey(autoGenerate = true)
-    var id: Int? = null,
+    val id: Int? = null,
     @ColumnInfo(name = "message")
     val message: String,
     @ColumnInfo(name = "postdate")

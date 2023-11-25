@@ -58,8 +58,11 @@ fun PlaceholderInputField(label: String, startValue: String? = null, isSingleLin
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PasswordInputField(label: String, onPasswordChanged: (String) -> Unit){
+fun PasswordInputField(label: String, startValue: String? = null, onPasswordChanged: (String) -> Unit){
     var text = remember { mutableStateOf("") }
+    startValue?.let{
+        text.value = startValue
+    }
 
     OutlinedTextField(
         value = text.value,

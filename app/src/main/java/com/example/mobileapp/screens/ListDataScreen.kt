@@ -18,7 +18,6 @@ import com.example.mobileapp.components.DataListScroll
 import com.example.mobileapp.components.NavBar
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Story
-import com.example.mobileapp.entities.StorySingleton
 import com.example.mobileapp.ui.theme.BackgroundItem1
 import com.example.mobileapp.ui.theme.BackgroundItem2
 import kotlinx.coroutines.Dispatchers

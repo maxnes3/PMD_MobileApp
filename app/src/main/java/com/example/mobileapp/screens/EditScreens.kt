@@ -182,3 +182,66 @@ fun EditMailScreen(navController: NavHostController) {
             backgroundColor = ButtonColor2, textColor = Color.White)
     }
 }
+
+@Composable
+fun EditUserScreen(navController: NavHostController){
+    val context = LocalContext.current
+
+    val photo = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.photoplaceholder)) }
+    val name = remember { mutableStateOf("") }
+    val password = remember { mutableStateOf("") }
+    val email = remember { mutableStateOf("") }
+
+    val imageData = remember { mutableStateOf<Uri?>(null) }
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {uri: Uri? ->
+            imageData.value = uri
+        }
+    imageData.value?.let {
+        if (Build.VERSION.SDK_INT < 28) {
+            photo.value = MediaStore.Images
+                .Media.getBitmap(context.contentResolver, imageData.value)
+
+        } else {
+            val source = ImageDecoder
+                .createSource(context.contentResolver, imageData.value!!)
+            photo.value = ImageDecoder.decodeBitmap(source)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 8.dp),
+        verticalArrangement = Arrangement.Bottom
+    ) {
+        Image(
+            bitmap = photo.value.asImageBitmap(),
+            contentDescription = "editplaceholder",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .size(384.dp)
+                .padding(8.dp)
+                .align(Alignment.CenterHorizontally))
+        ActiveButton(label = "Выбрать фото", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
+            launcher.launch("image/*")
+        })
+        PlaceholderInputField(label = "Никнейм", isSingleLine = true,
+            startValue = name.value, onTextChanged = { newName ->
+                name.value = newName
+            })
+        PlaceholderInputField(label = "Пароль", isSingleLine = true,
+            startValue = password.value, onTextChanged = { newPassword ->
+                password.value = newPassword
+            })
+        PlaceholderInputField(label = "Почта", isSingleLine = true,
+            startValue = email.value, onTextChanged = { newEmail ->
+                email.value = newEmail
+            })
+        ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
+            //edit.value = !edit.value
+        })
+        NavigationButton(navController = navController, destination = "story", label = "Назад",
+            backgroundColor = ButtonColor2, textColor = Color.White)
+    }
+}
