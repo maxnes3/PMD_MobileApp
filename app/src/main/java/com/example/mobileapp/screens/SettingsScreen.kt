@@ -49,14 +49,24 @@ fun SettingsScreen(navController: NavHostController){
                 .size(384.dp)
                 .padding(8.dp))
         IconButton(iconLeft = Icons.Default.AccountCircle, label = "Учётная запись",
-            backgroundColor = ButtonColor2, textColor = Color.White, onClickAction = { })
+            backgroundColor = ButtonColor2, textColor = Color.White, onClickAction = {
+                navController.navigate("edituser")
+            })
         IconButton(iconLeft = Icons.Default.Face, label = "Внешний вид",
-            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
+
+            })
         IconButton(iconLeft = Icons.Default.Share, label = "Контакты",
-            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
+
+            })
         IconButton(iconLeft = Icons.Default.Info, label = "О приложении",
-            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = { })
+            backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
+
+            })
         IconButton(iconLeft = Icons.Default.ExitToApp, label = "Выйти",
-            backgroundColor = Color.Red, textColor = Color.White, onClickAction = { navController.navigate("") })
+            backgroundColor = Color.Red, textColor = Color.White, onClickAction = {
+                navController.navigate("authorization")
+            })
     }
 }
