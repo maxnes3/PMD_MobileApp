@@ -16,7 +16,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -27,22 +28,29 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
-import com.example.mobileapp.components.PasswordInputField
 import com.example.mobileapp.components.PlaceholderInputField
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
+import com.example.mobileapp.database.viewmodels.MailViewModel
+import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
+import com.example.mobileapp.database.viewmodels.StoryViewModel
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @Composable
-fun EditStoryScreen(navController: NavHostController, storyId: Int? = null) {
+fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
+                    storyViewModel: StoryViewModel = viewModel(
+                        factory = MobileAppViewModelProvider.Factory
+                    )) {
     val context = LocalContext.current
 
     val cover = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.editplaceholder)) }
@@ -58,7 +66,6 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null) {
         if (Build.VERSION.SDK_INT < 28) {
             cover.value = MediaStore.Images
                 .Media.getBitmap(context.contentResolver, imageData.value)
-
         } else {
             val source = ImageDecoder
                 .createSource(context.contentResolver, imageData.value!!)
@@ -67,45 +74,10 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null) {
     }
 
     storyId?.let{
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                val story = MobileAppDataBase.getInstance(context).storyDao().getById(storyId!!)
-                cover.value = story!!.cover
-                title.value = story!!.title
-                description.value = story!!.description
-            }
-        }
-    }
-
-    val edit = remember { mutableStateOf(false) }
-    if (edit.value){
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                storyId?.let {
-                    MobileAppDataBase.getInstance(context).storyDao()
-                        .update(
-                            Story(
-                                id = storyId,
-                                title = title.value,
-                                description = description.value,
-                                cover = cover.value,
-                                userId = 1)
-                        )
-
-                } ?: run {
-                    MobileAppDataBase.getInstance(context).storyDao()
-                        .insert(
-                            Story(
-                                title = title.value,
-                                description = description.value,
-                                cover = cover.value,
-                                userId = 1)
-                        )
-                }
-            }
-        }
-        edit.value = !edit.value
-        navController.navigate("story")
+        val story by storyViewModel.getStoryById(storyId).collectAsState(null)
+        cover.value = story!!.cover
+        title.value = story!!.title
+        description.value = story!!.description
     }
 
     Column(
@@ -134,7 +106,27 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null) {
             description.value = newDescription
         })
         ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
-            edit.value = !edit.value
+            storyId?.let {
+                storyViewModel.updateStory(
+                    Story(
+                        id = storyId,
+                        cover = cover.value,
+                        title = title.value,
+                        description = description.value,
+                        userId = GlobalUser.getInstance().getUser()?.id!!
+                    )
+                )
+            } ?: run {
+                storyViewModel.insertStory(
+                    Story(
+                        cover = cover.value,
+                        title = title.value,
+                        description = description.value,
+                        userId = GlobalUser.getInstance().getUser()?.id!!
+                    )
+                )
+            }
+            navController.navigate("story")
         })
         NavigationButton(navController = navController, destination = "story", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)
@@ -142,22 +134,12 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null) {
 }
 
 @Composable
-fun EditMailScreen(navController: NavHostController) {
-    val context = LocalContext.current
-
+fun EditMailScreen(navController: NavHostController,
+                   mailViewModel: MailViewModel = viewModel(
+                       factory = MobileAppViewModelProvider.Factory
+                   )) {
     val message = remember { mutableStateOf("") }
 
-    val create = remember { mutableStateOf(false) }
-    if(create.value){
-        LaunchedEffect(Unit) {
-            withContext(Dispatchers.IO) {
-                MobileAppDataBase.getInstance(context).mailDao()
-                    .insert(Mail(message = message.value, userId = 2))
-            }
-        }
-        create.value = !create.value
-        navController.navigate("mail")
-    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -176,7 +158,13 @@ fun EditMailScreen(navController: NavHostController) {
             message.value = newmessage
         })
         ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
-            create.value = !create.value
+            mailViewModel.insertMail(
+                Mail(
+                    message = message.value,
+                    userId = GlobalUser.getInstance().getUser()?.id!!
+                )
+            )
+            navController.navigate("mail")
         })
         NavigationButton(navController = navController, destination = "mail", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)

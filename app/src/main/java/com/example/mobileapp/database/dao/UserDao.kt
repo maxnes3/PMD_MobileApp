@@ -15,7 +15,10 @@ interface UserDao {
     fun getAll():Flow<List<User>>
 
     @Query("select * from users where users.id = :id")
-    fun getById(id: Int): User?
+    suspend fun getById(id: Int): User?
+
+    @Query("select * from users where users.login = :login")
+    suspend fun getByLogin(login: String): User?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(user: User)

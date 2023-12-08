@@ -15,7 +15,7 @@ interface StoryDao {
     fun getAll(): Flow<List<Story>>
 
     @Query("select * from stories where stories.id = :id")
-    fun getById(id: Int): Story?
+    fun getById(id: Int): Flow<Story?>
 
     @Query("select * from stories where stories.user_id = :userId")
     fun getByUserId(userId: Int): Flow<List<Story>>

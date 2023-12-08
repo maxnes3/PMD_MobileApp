@@ -36,11 +36,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.mobileapp.R
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
+import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
+import com.example.mobileapp.database.viewmodels.StoryViewModel
 import com.example.mobileapp.ui.theme.BackgroundItem2
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
@@ -78,18 +81,15 @@ inline fun <reified T> List<*>.isListOf(): Boolean {
 }
 
 @Composable
-fun StoryListItem(item: Story, navController: NavHostController){
-    val context = LocalContext.current
-
+fun StoryListItem(item: Story, navController: NavHostController,
+                  storyViewModel: StoryViewModel = viewModel(
+                      factory = MobileAppViewModelProvider.Factory
+                  )) {
     val isExpanded = remember {
         mutableStateOf(false)
     }
 
     val showDialog = remember {
-        mutableStateOf(false)
-    }
-
-    val delete = remember {
         mutableStateOf(false)
     }
 
@@ -153,21 +153,11 @@ fun StoryListItem(item: Story, navController: NavHostController){
     if(showDialog.value) {
         DialogWindow(label = "Подтверждение",
             message = "Вы уверены что хотите удалить запись?", onConfirmAction = {
-                delete.value = !delete.value
+                storyViewModel.deleteStory(item)
                 showDialog.value = !showDialog.value
         }, onDismissAction = {
                 showDialog.value = !showDialog.value
         })
-    }
-
-    if(delete.value) {
-        LaunchedEffect(Unit){
-            withContext(Dispatchers.IO){
-                MobileAppDataBase.getInstance(context).storyDao().delete(item)
-            }
-        }
-        delete.value = !delete.value
-        navController.navigate("story")
     }
 }
 

@@ -18,13 +18,17 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,8 +41,8 @@ import com.example.mobileapp.screens.Authorization
 import com.example.mobileapp.screens.EditMailScreen
 import com.example.mobileapp.screens.EditStoryScreen
 import com.example.mobileapp.screens.EditUserScreen
-import com.example.mobileapp.screens.ListDataScreen
 import com.example.mobileapp.screens.ListMailScreen
+import com.example.mobileapp.screens.ListStoryScreen
 import com.example.mobileapp.screens.MainScreen
 import com.example.mobileapp.screens.Registration
 import com.example.mobileapp.screens.SettingsScreen
@@ -53,9 +57,28 @@ val navBarItems = listOf(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NavBar(navController: NavHostController) {
+    val topBarState = rememberSaveable { (mutableStateOf(false)) }
     val bottomBarState = rememberSaveable { (mutableStateOf(false)) }
 
     Scaffold(
+        topBar = {
+            AnimatedVisibility(
+                visible = topBarState.value,
+                enter = slideInVertically(initialOffsetY = { it }),
+                exit = slideOutVertically(targetOffsetY = { it }),
+                content = {
+                    TopAppBar(title = {
+                        Text(
+                            text = "Storyteller",
+                            textAlign = TextAlign.Center,
+                            fontFamily = FontFamily(Font(
+                                R.font.irishgrover_regular, FontWeight.Bold
+                            ))
+                        )
+                    })
+                }
+            )
+        },
         bottomBar = {
             AnimatedVisibility(
                 visible = bottomBarState.value,
@@ -98,30 +121,37 @@ fun NavBar(navController: NavHostController) {
             modifier = Modifier.padding(innerPaddings)
         ) {
             composable("authorization"){
+                topBarState.value = true
                 bottomBarState.value = false
                 Authorization(navController = navController)
             }
             composable("registration"){
+                topBarState.value = true
                 bottomBarState.value = false
                 Registration(navController = navController)
             }
             composable("main"){
+                topBarState.value = false
                 bottomBarState.value = true
                 MainScreen(navController = navController)
             }
             composable("story"){
+                topBarState.value = false
                 bottomBarState.value = true
-                ListDataScreen(navController = navController)
+                ListStoryScreen(navController = navController)
             }
             composable("mail"){
+                topBarState.value = false
                 bottomBarState.value = true
                 ListMailScreen(navController = navController)
             }
             composable("settings"){
+                topBarState.value = true
                 bottomBarState.value = true
                 SettingsScreen(navController = navController)
             }
             composable("editstory"){ // Без аргумента
+                topBarState.value = false
                 bottomBarState.value = false
                 EditStoryScreen(navController = navController)
             }
@@ -130,15 +160,18 @@ fun NavBar(navController: NavHostController) {
                 arguments = listOf(navArgument("id") { type = NavType.IntType }) //С аргументом
             ) { backStackEntry ->
                 backStackEntry.arguments?.let {
+                    topBarState.value = false
                     bottomBarState.value = false
                     EditStoryScreen(navController = navController, storyId = it.getInt("id"))
                 }
             }
             composable("editmail"){ // Без аргумента
+                topBarState.value = false
                 bottomBarState.value = false
                 EditMailScreen(navController = navController)
             }
             composable("edituser"){
+                topBarState.value = false
                 bottomBarState.value = false
                 EditUserScreen(navController = navController)
             }
