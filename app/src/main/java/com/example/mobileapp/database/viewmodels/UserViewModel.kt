@@ -14,7 +14,19 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel() {
     suspend fun getUser(id: Int): User? = userRepository.getUser(id)
 
     fun updateUser(user: User) = viewModelScope.launch {
+        if (user.login.isEmpty()){
+            return@launch
+        }
+
+        if (user.email.isEmpty() || !isValidEmail(user.email)){
+            return@launch
+        }
+
+        if (user.password.isEmpty()){
+            return@launch
+        }
         userRepository.updateUser(user)
+        GlobalUser.getInstance().setUser(user)
     }
 
     fun deleteUser(user: User) = viewModelScope.launch {

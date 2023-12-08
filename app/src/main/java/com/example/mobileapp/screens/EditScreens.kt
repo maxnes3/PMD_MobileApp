@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -38,12 +40,15 @@ import com.example.mobileapp.components.PlaceholderInputField
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
+import com.example.mobileapp.database.entities.User
 import com.example.mobileapp.database.viewmodels.MailViewModel
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
 import com.example.mobileapp.database.viewmodels.StoryViewModel
+import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 
 @Composable
@@ -75,9 +80,11 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
 
     storyId?.let{
         val story by storyViewModel.getStoryById(storyId).collectAsState(null)
-        cover.value = story!!.cover
-        title.value = story!!.title
-        description.value = story!!.description
+        story?.let {
+            cover.value = it.cover
+            title.value = it.title
+            description.value = it.description
+        }
     }
 
     Column(
@@ -172,11 +179,15 @@ fun EditMailScreen(navController: NavHostController,
 }
 
 @Composable
-fun EditUserScreen(navController: NavHostController){
+fun EditUserScreen(navController: NavHostController,
+                   userViewModel: UserViewModel = viewModel(
+                       factory = MobileAppViewModelProvider.Factory
+                   )) {
     val context = LocalContext.current
 
+    var userId: Int? = null
     val photo = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.photoplaceholder)) }
-    val name = remember { mutableStateOf("") }
+    val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
 
@@ -197,6 +208,15 @@ fun EditUserScreen(navController: NavHostController){
         }
     }
 
+    GlobalUser.getInstance().getUser()?.let{user ->
+        if (user!!.photo != null)
+            photo.value = user!!.photo!!
+        userId = user!!.id!!
+        login.value = user!!.login
+        password.value = user!!.password
+        email.value = user!!.email
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -215,8 +235,8 @@ fun EditUserScreen(navController: NavHostController){
             launcher.launch("image/*")
         })
         PlaceholderInputField(label = "Никнейм", isSingleLine = true,
-            startValue = name.value, onTextChanged = { newName ->
-                name.value = newName
+            startValue = login.value, onTextChanged = { newLogin ->
+                login.value = newLogin
             })
         PlaceholderInputField(label = "Пароль", isSingleLine = true,
             startValue = password.value, onTextChanged = { newPassword ->
@@ -227,9 +247,18 @@ fun EditUserScreen(navController: NavHostController){
                 email.value = newEmail
             })
         ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
-            //edit.value = !edit.value
+            userViewModel.updateUser(
+                User(
+                    id = userId,
+                    login = login.value,
+                    password = password.value,
+                    email = email.value,
+                    photo = photo.value
+                )
+            )
+            navController.navigate("settings")
         })
-        NavigationButton(navController = navController, destination = "story", label = "Назад",
+        NavigationButton(navController = navController, destination = "settings", label = "Назад",
             backgroundColor = ButtonColor2, textColor = Color.White)
     }
 }

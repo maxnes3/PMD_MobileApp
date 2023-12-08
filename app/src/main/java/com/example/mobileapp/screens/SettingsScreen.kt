@@ -27,6 +27,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
 import com.example.mobileapp.components.IconButton
 import com.example.mobileapp.components.NavBar
@@ -46,7 +47,7 @@ fun SettingsScreen(navController: NavHostController){
             contentDescription = "settings",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(384.dp)
+                .size(320.dp)
                 .padding(8.dp))
         IconButton(iconLeft = Icons.Default.AccountCircle, label = "Учётная запись",
             backgroundColor = ButtonColor2, textColor = Color.White, onClickAction = {
@@ -66,6 +67,7 @@ fun SettingsScreen(navController: NavHostController){
             })
         IconButton(iconLeft = Icons.Default.ExitToApp, label = "Выйти",
             backgroundColor = Color.Red, textColor = Color.White, onClickAction = {
+                GlobalUser.getInstance().setUser(null)
                 navController.navigate("authorization")
             })
     }
