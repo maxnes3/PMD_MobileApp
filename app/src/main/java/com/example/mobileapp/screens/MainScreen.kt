@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,11 +41,16 @@ fun MainScreen(navController: NavHostController,
                    factory = MobileAppViewModelProvider.Factory
                )) {
     val stories = storyViewModel.getAllStories.collectAsLazyPagingItems()
+
+    val search = remember { mutableStateOf("") }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        SearchInputField()
+        SearchInputField(onTextChanged = {newsearch ->
+            search.value = newsearch
+        })
         if (stories.itemCount > 0){
             LazyVerticalGrid(
                 columns = GridCells.Fixed(1)
@@ -53,7 +60,7 @@ fun MainScreen(navController: NavHostController,
                     key = stories.itemKey { item -> item.id!! }
                 ) { index: Int ->
                     val story: Story? = stories[index]
-                    if (story != null) {
+                    if (story != null && (search.value.isEmpty() || story.title.contains(search.value, ignoreCase = true))) {
                         StoryListItem(item = story, navController = navController, isReadOnly = true)
                     }
                 }

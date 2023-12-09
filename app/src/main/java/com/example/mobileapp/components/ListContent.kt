@@ -74,7 +74,7 @@ fun <T : Any> DataListScroll(navController: NavHostController, dataList: List<T>
         items(dataList){ item ->
             when(item){
                 is Story -> StoryListItem(item = item, navController = navController)
-                is Mail -> MailListItem(item = item)
+                is Mail -> MailListItem(item = item, navController = navController)
             }
         }
     }
@@ -143,7 +143,7 @@ fun StoryListItem(item: Story, navController: NavHostController,
                 if (isReadOnly!!){
                     DataListItemButton(label = "Подробнее", backgroundColor = ButtonColor2,
                         textColor = Color.White, onClickAction = {
-
+                            navController.navigate("viewstory/${item.id}")
                         })
                 }
                 else{
@@ -193,7 +193,7 @@ fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color, 
 }
 
 @Composable
-fun MailListItem(item: Mail){
+fun MailListItem(item: Mail, navController: NavHostController){
     val isExpanded = remember {
         mutableStateOf(false)
     }
@@ -241,7 +241,7 @@ fun MailListItem(item: Mail){
             ) {
                 DataListItemButton(label = "Подробнее", backgroundColor = ButtonColor2,
                     textColor = Color.White, onClickAction = {
-
+                        navController.navigate("viewmail/${item.id}")
                 })
             }
         }

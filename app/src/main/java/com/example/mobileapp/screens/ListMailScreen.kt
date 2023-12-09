@@ -54,7 +54,7 @@ fun ListMailScreen(navController: NavHostController,
             ) { index: Int ->
                 val mail: Mail? = mails[index]
                 if (mail != null) {
-                    MailListItem(item = mail)
+                    MailListItem(item = mail, navController = navController)
                 }
             }
         }

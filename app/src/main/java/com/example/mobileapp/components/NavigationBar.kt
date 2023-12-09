@@ -43,9 +43,11 @@ import com.example.mobileapp.screens.EditStoryScreen
 import com.example.mobileapp.screens.EditUserScreen
 import com.example.mobileapp.screens.ListMailScreen
 import com.example.mobileapp.screens.ListStoryScreen
+import com.example.mobileapp.screens.MailViewScreen
 import com.example.mobileapp.screens.MainScreen
 import com.example.mobileapp.screens.Registration
 import com.example.mobileapp.screens.SettingsScreen
+import com.example.mobileapp.screens.StoryViewScreen
 
 val navBarItems = listOf(
     NavBarItem(route = "main", label = "Главная", icon = R.drawable.home),
@@ -178,6 +180,26 @@ fun NavBar(navController: NavHostController) {
                 topBarState.value = false
                 bottomBarState.value = false
                 EditUserScreen(navController = navController)
+            }
+            composable(
+                "viewstory/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType }) //С аргументом
+            ) { backStackEntry ->
+                backStackEntry.arguments?.let {
+                    topBarState.value = false
+                    bottomBarState.value = false
+                    StoryViewScreen(navController = navController, storyId = it.getInt("id"))
+                }
+            }
+            composable(
+                "viewmail/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.IntType }) //С аргументом
+            ) { backStackEntry ->
+                backStackEntry.arguments?.let {
+                    topBarState.value = false
+                    bottomBarState.value = false
+                    MailViewScreen(navController = navController, mailId = it.getInt("id"))
+                }
             }
         }
     }

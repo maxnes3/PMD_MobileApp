@@ -82,13 +82,14 @@ fun PasswordInputField(label: String, startValue: String? = null, onPasswordChan
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchInputField(){
+fun SearchInputField(onTextChanged: (String) -> Unit){
     var text = remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = text.value,
         onValueChange = {
             text.value = it
+            onTextChanged(it)
         },
         leadingIcon = {
             Icon(

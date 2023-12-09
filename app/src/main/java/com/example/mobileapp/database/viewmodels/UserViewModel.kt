@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 class UserViewModel(private val userRepository: UserRepository): ViewModel() {
     val getAllUsers = userRepository.getAllUsers()
 
-    suspend fun getUser(id: Int): User? = userRepository.getUser(id)
+    fun getUser(id: Int): Flow<User?> = userRepository.getUser(id)
 
     fun updateUser(user: User) = viewModelScope.launch {
         if (user.login.isEmpty()){

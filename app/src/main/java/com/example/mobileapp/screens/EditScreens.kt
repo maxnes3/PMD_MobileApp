@@ -76,12 +76,19 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
         }
     }
 
-    storyId?.let{
-        val story by storyViewModel.getStoryById(storyId).collectAsState(null)
-        story?.let {
-            cover.value = it.cover
-            title.value = it.title
-            description.value = it.description
+    LaunchedEffect(Unit) {
+        storyId?.let {
+            storyViewModel.getStoryById(storyId).collect {
+                if (it != null) {
+                    cover.value = it.cover
+                }
+                if (it != null) {
+                    title.value = it.title
+                }
+                if (it != null) {
+                    description.value = it.description
+                }
+            }
         }
     }
 

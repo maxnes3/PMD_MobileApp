@@ -45,8 +45,16 @@ abstract class MobileAppDataBase : RoomDatabase() {
                     cover = BitmapFactory.decodeResource(appContext.resources, R.drawable.king), userId = 2))
 
                 val mailDao = database.mailDao()
-                mailDao.insert(Mail(message = "Выложил новые страницы", userId = 1))
-                mailDao.insert(Mail(message = "Меня отменили в Твиттере", userId = 2))
+                for (i in 0..50){
+                    if (i % 2 == 0){
+                        mailDao.insert(Mail(message = "Выложил новые страницы", userId = 1))
+                    }
+                    else{
+                        mailDao.insert(Mail(message = "Меня отменили в Твиттере", userId = 2))
+                    }
+                }
+                /*mailDao.insert(Mail(message = "Выложил новые страницы", userId = 1))
+                mailDao.insert(Mail(message = "Меня отменили в Твиттере", userId = 2))*/
             }
         }
 
