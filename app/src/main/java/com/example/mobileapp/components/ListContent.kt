@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AlertDialog
@@ -38,6 +40,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.itemKey
 import com.example.mobileapp.R
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Mail
@@ -82,6 +86,7 @@ inline fun <reified T> List<*>.isListOf(): Boolean {
 
 @Composable
 fun StoryListItem(item: Story, navController: NavHostController,
+                  isReadOnly: Boolean? = false,
                   storyViewModel: StoryViewModel = viewModel(
                       factory = MobileAppViewModelProvider.Factory
                   )) {
@@ -135,16 +140,24 @@ fun StoryListItem(item: Story, navController: NavHostController,
                 visible = isExpanded.value,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ){
-                    DataListItemButton("Изменить", ButtonColor2, Color.White, onClickAction = {
-                        navController.navigate("editstory/${item.id}")
-                    })
-                    DataListItemButton("Удалить", Color.Red, Color.White, onClickAction = {
-                        showDialog.value = !showDialog.value
-                    })
+                if (isReadOnly!!){
+                    DataListItemButton(label = "Подробнее", backgroundColor = ButtonColor2,
+                        textColor = Color.White, onClickAction = {
+
+                        })
+                }
+                else{
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ){
+                        DataListItemButton("Изменить", ButtonColor2, Color.White, onClickAction = {
+                            navController.navigate("editstory/${item.id}")
+                        })
+                        DataListItemButton("Удалить", Color.Red, Color.White, onClickAction = {
+                            showDialog.value = !showDialog.value
+                        })
+                    }
                 }
             }
         }
@@ -226,22 +239,10 @@ fun MailListItem(item: Mail){
                 visible = isExpanded.value,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Button(
-                    onClick = { /* Действие при нажатии кнопки */ },
-                    modifier = Modifier
-                        .requiredHeight(64.dp)
-                        .fillMaxWidth(),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = ButtonColor2
-                    )
-                ) {
-                    Text(
-                        text = "Подробнее",
-                        color = Color.White,
-                        fontSize = 18.sp,
-                    )
-                }
+                DataListItemButton(label = "Подробнее", backgroundColor = ButtonColor2,
+                    textColor = Color.White, onClickAction = {
+
+                })
             }
         }
     }

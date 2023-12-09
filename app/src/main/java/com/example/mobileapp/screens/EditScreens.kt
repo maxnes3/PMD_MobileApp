@@ -6,17 +6,18 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -24,6 +25,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
@@ -37,7 +39,6 @@ import com.example.mobileapp.R
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
 import com.example.mobileapp.components.PlaceholderInputField
-import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.entities.User
@@ -47,9 +48,6 @@ import com.example.mobileapp.database.viewmodels.StoryViewModel
 import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.withContext
 
 @Composable
 fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
@@ -185,7 +183,7 @@ fun EditUserScreen(navController: NavHostController,
                    )) {
     val context = LocalContext.current
 
-    var userId: Int? = null
+    var userId = remember { mutableStateOf(0) }
     val photo = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.photoplaceholder)) }
     val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -200,7 +198,6 @@ fun EditUserScreen(navController: NavHostController,
         if (Build.VERSION.SDK_INT < 28) {
             photo.value = MediaStore.Images
                 .Media.getBitmap(context.contentResolver, imageData.value)
-
         } else {
             val source = ImageDecoder
                 .createSource(context.contentResolver, imageData.value!!)
@@ -208,13 +205,15 @@ fun EditUserScreen(navController: NavHostController,
         }
     }
 
-    GlobalUser.getInstance().getUser()?.let{user ->
-        if (user!!.photo != null)
-            photo.value = user!!.photo!!
-        userId = user!!.id!!
-        login.value = user!!.login
-        password.value = user!!.password
-        email.value = user!!.email
+    LaunchedEffect(Unit) {
+        GlobalUser.getInstance().getUser()?.let { user ->
+            if (user!!.photo != null)
+                photo.value = user!!.photo!!
+            userId.value = user!!.id!!
+            login.value = user!!.login
+            password.value = user!!.password
+            email.value = user!!.email
+        }
     }
 
     Column(
@@ -228,8 +227,13 @@ fun EditUserScreen(navController: NavHostController,
             contentDescription = "editplaceholder",
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(384.dp)
                 .padding(8.dp)
+                .clip(CircleShape)
+                .size(384.dp)
+                .border(
+                    width = 2.dp,
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
                 .align(Alignment.CenterHorizontally))
         ActiveButton(label = "Выбрать фото", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
             launcher.launch("image/*")
@@ -249,7 +253,7 @@ fun EditUserScreen(navController: NavHostController,
         ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
             userViewModel.updateUser(
                 User(
-                    id = userId,
+                    id = userId.value,
                     login = login.value,
                     password = password.value,
                     email = email.value,
@@ -258,7 +262,9 @@ fun EditUserScreen(navController: NavHostController,
             )
             navController.navigate("settings")
         })
-        NavigationButton(navController = navController, destination = "settings", label = "Назад",
-            backgroundColor = ButtonColor2, textColor = Color.White)
+        ActiveButton(label = "Назад", backgroundColor = ButtonColor2, textColor = Color.White,
+            onClickAction = {
+                navController.navigate("settings")
+        })
     }
 }

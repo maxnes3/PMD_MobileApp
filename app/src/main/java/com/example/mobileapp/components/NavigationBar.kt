@@ -67,15 +67,19 @@ fun NavBar(navController: NavHostController) {
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it }),
                 content = {
-                    TopAppBar(title = {
-                        Text(
-                            text = "Storyteller",
-                            textAlign = TextAlign.Center,
-                            fontFamily = FontFamily(Font(
-                                R.font.irishgrover_regular, FontWeight.Bold
-                            ))
-                        )
-                    })
+                    TopAppBar(
+                        title = {
+                            Text(
+                                text = "Storyteller!",
+                                textAlign = TextAlign.Center,
+                                fontFamily = FontFamily(
+                                    Font(
+                                        R.font.irishgrover_regular, FontWeight.Bold
+                                    )
+                                )
+                            )
+                        }
+                    )
                 }
             )
         },

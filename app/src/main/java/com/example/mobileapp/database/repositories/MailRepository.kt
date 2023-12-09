@@ -1,10 +1,11 @@
 package com.example.mobileapp.database.repositories
 
+import androidx.paging.PagingData
 import com.example.mobileapp.database.entities.Mail
 import kotlinx.coroutines.flow.Flow
 
 interface MailRepository {
-    fun getAllMails(): Flow<List<Mail>>
+    fun getAllMails(): Flow<PagingData<Mail>>
 
     fun getMail(id: Int):  Flow<Mail?>
 

@@ -67,14 +67,16 @@ fun Authorization(navController: NavHostController,
         })
         ActiveButton(label = "Вход", backgroundColor = ButtonColor2,
             textColor = Color.White, onClickAction = {
-                userViewModel.authUser(
-                    User(
-                        login = login.value,
-                        password = password.value,
-                        email = String()
+                if (login.value.isNotEmpty() && password.value.isNotEmpty()) {
+                    userViewModel.authUser(
+                        User(
+                            login = login.value,
+                            password = password.value,
+                            email = String()
+                        )
                     )
-                )
-                navController.navigate("main")
+                    navController.navigate("main")
+                }
         })
         NavigationButton(navController = navController, destination = "registration", label = "Регистрация",
             backgroundColor = ButtonColor1, textColor = Color.Black)
