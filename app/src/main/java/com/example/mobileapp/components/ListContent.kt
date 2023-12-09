@@ -48,10 +48,12 @@ import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
 import com.example.mobileapp.database.viewmodels.StoryViewModel
+import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.BackgroundItem2
 import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.ButtonColor2
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -193,9 +195,22 @@ fun DataListItemButton(label: String, backgroundColor: Color, textColor: Color, 
 }
 
 @Composable
-fun MailListItem(item: Mail, navController: NavHostController){
+fun MailListItem(item: Mail, navController: NavHostController,
+                 userViewModel: UserViewModel = viewModel(
+                     factory = MobileAppViewModelProvider.Factory
+                 )) {
     val isExpanded = remember {
         mutableStateOf(false)
+    }
+
+    val userName = remember { mutableStateOf("") }
+
+    LaunchedEffect(Unit){
+        userViewModel.getUser(item.userId).collect {
+            if (it != null) {
+                userName.value = it.email
+            }
+        }
     }
 
     Card(
@@ -229,7 +244,7 @@ fun MailListItem(item: Mail, navController: NavHostController){
                     modifier = Modifier.padding(8.dp)
                 ){
                     Text(
-                        text = "item.username | ${dateFormat.format(Date(item.postdate!!))}",
+                        text = "${userName.value} | ${dateFormat.format(Date(item.postdate!!))}",
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold)
                     Text(text = item.message)

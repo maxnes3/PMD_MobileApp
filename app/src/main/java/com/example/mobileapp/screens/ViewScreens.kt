@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -105,21 +106,25 @@ fun MailViewScreen(navController: NavHostController, mailId: Int,
                    )) {
     val context = LocalContext.current
 
-    val userId = remember { mutableStateOf(0) }
     val userName = remember { mutableStateOf("") }
     val photo = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.photoplaceholder)) }
     val message = remember { mutableStateOf("") }
     val postdate = remember { mutableStateOf<Long>(0) }
 
-    val mail by mailViewModel.getMail(mailId).collectAsState(null)
-    mail?.let {
-        userId.value = it.userId
-        message.value = it.message
-        postdate.value = it.postdate!!
-        val user by userViewModel.getUser(userId.value).collectAsState(null)
-        user?.let {data ->
-            photo.value = data.photo!!
-            userName.value = data.login
+    LaunchedEffect(Unit){
+        mailViewModel.getMail(mailId).collect{
+            if (it != null) {
+                message.value = it.message
+                postdate.value = it.postdate!!
+                userViewModel.getUser(it.userId).collect {user ->
+                    if (user != null) {
+                        if(user.photo != null) {
+                            photo.value = user.photo
+                        }
+                        userName.value = user.email
+                    }
+                }
+            }
         }
     }
 
