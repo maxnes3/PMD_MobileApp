@@ -1,5 +1,7 @@
 package com.example.mobileapp.components
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -199,16 +201,21 @@ fun MailListItem(item: Mail, navController: NavHostController,
                  userViewModel: UserViewModel = viewModel(
                      factory = MobileAppViewModelProvider.Factory
                  )) {
+    val context = LocalContext.current
     val isExpanded = remember {
         mutableStateOf(false)
     }
 
+    val userPhoto = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.post)) }
     val userName = remember { mutableStateOf("") }
 
     LaunchedEffect(Unit){
         userViewModel.getUser(item.userId).collect {
             if (it != null) {
                 userName.value = it.email
+                if (it.photo != null){
+                    userPhoto.value = it.photo
+                }
             }
         }
     }
@@ -234,7 +241,7 @@ fun MailListItem(item: Mail, navController: NavHostController,
             Row(
                 verticalAlignment = Alignment.Top
             ){
-                Image(painter = painterResource(id = R.drawable.post),
+                Image(bitmap = userPhoto.value.asImageBitmap(),
                     contentDescription = "message",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
