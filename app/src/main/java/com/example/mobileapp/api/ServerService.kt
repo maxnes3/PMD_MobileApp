@@ -19,7 +19,7 @@ import retrofit2.http.Query
 
 interface ServerService {
     //USER
-    @GET("USER/get/{id}")
+    @GET("user/get/{id}")
     suspend fun getUser(
         @Path("id") id: Int,
     ): UserRemote
@@ -38,6 +38,9 @@ interface ServerService {
     suspend fun updateUser(
         @Body user: UserRemote
     ): UserRemote
+
+    @GET("user/getAll")
+    suspend fun getUsers(): List<UserRemote>
 
     //STORY
     @GET("story/get/{id}")

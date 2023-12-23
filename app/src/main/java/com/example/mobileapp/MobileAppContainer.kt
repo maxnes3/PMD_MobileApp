@@ -35,6 +35,7 @@ class MobileAppDataContainer(private val context: Context): MobileAppContainer {
         //OfflineStoryRepository(MobileAppDataBase.getInstance(context).storyDao())
         RestStoryRepository(ServerService.getInstance(),
             storyReposLocal,
+            userReposLocal,
             MobileAppDataBase.getInstance(context),
             remoteKeyRepository)
     }
@@ -50,5 +51,9 @@ class MobileAppDataContainer(private val context: Context): MobileAppContainer {
 
     private val storyReposLocal: OfflineStoryRepository by lazy {
         OfflineStoryRepository(MobileAppDataBase.getInstance(context).storyDao())
+    }
+
+    private val userReposLocal: OfflineUserRepository by lazy {
+        OfflineUserRepository(MobileAppDataBase.getInstance(context).userDao())
     }
 }

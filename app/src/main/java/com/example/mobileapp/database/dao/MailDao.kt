@@ -17,7 +17,7 @@ interface MailDao {
     fun getAll(): PagingSource<Int, Mail>
 
     @Query("select * from mails where mails.id = :id")
-    fun getById(id: Int): Flow<Mail?>
+    suspend fun getById(id: Int): Mail?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(mail: Mail)

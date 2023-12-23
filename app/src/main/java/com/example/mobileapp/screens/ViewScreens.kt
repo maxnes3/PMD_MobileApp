@@ -124,18 +124,17 @@ fun MailViewScreen(navController: NavHostController, mailId: Int,
     val postdate = remember { mutableStateOf<Long>(0) }
 
     LaunchedEffect(Unit){
-        mailViewModel.getMail(mailId).collect{
-            if (it != null) {
-                message.value = it.message
-                postdate.value = it.postdate!!
-                val user = userViewModel.getUser(it.userId)
-                if (user != null) {
-                    if(user.photo != null) {
-                        photo.value = user.photo
-                    }
-                    userName.value = user.email
-                }
+        val mail = mailViewModel.getMail(mailId)
+        if (mail != null) {
+            message.value = mail.message
+            postdate.value = mail.postdate!!
+        }
+        val user = mail?.let { userViewModel.getUser(it.userId) }
+        if (user != null) {
+            if(user.photo != null) {
+                photo.value = user.photo
             }
+            userName.value = user.email
         }
     }
 

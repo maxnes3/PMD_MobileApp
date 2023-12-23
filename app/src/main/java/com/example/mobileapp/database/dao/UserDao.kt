@@ -21,11 +21,14 @@ interface UserDao {
     suspend fun getByLogin(login: String): User?
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(user: User)
+    suspend fun insert(vararg user: User)
 
     @Update
     suspend fun update(user: User)
 
     @Delete
     suspend fun delete(user: User)
+
+    @Query("delete from stories")
+    suspend fun deleteAll()
 }

@@ -58,6 +58,5 @@ fun ListMailScreen(navController: NavHostController,
                 }
             }
         }
-        //DataListScroll(navController, mails)
     }
 }

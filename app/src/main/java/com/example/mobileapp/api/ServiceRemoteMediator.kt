@@ -6,11 +6,13 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import com.example.mobileapp.api.model.toStory
+import com.example.mobileapp.api.model.toUser
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.RemoteKeyType
 import com.example.mobileapp.database.entities.RemoteKeys
 import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.repositories.OfflineStoryRepository
+import com.example.mobileapp.database.repositories.OfflineUserRepository
 import com.example.mobileapp.database.repositories.RemoteKeysRepositoryImpl
 import retrofit2.HttpException
 import java.io.IOException
@@ -18,6 +20,7 @@ import java.io.IOException
 @OptIn(ExperimentalPagingApi::class)
 class ServiceRemoteMediator(private val service: ServerService,
                             private val storyRepository: OfflineStoryRepository,
+                            private val userRepository: OfflineUserRepository,
                             private val database: MobileAppDataBase,
                             private val dbRemoteKeyRepository: RemoteKeysRepositoryImpl
 ) : RemoteMediator<Int, Story>() {
@@ -48,12 +51,14 @@ class ServiceRemoteMediator(private val service: ServerService,
         }
 
         try {
+            val users = service.getUsers().map { it.toUser() }
             val stories = service.getStories(page, state.config.pageSize).map { it.toStory() }
             val endOfPaginationReached = stories.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
                     dbRemoteKeyRepository.deleteRemoteKey(RemoteKeyType.STORY)
                     storyRepository.clearStories()
+                    userRepository.clearUsers()
                 }
                 val prevKey = if (page == 1) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
@@ -66,6 +71,7 @@ class ServiceRemoteMediator(private val service: ServerService,
                     )
                 }
                 dbRemoteKeyRepository.createRemoteKeys(keys)
+                userRepository.insertUsers(users)
                 storyRepository.insertStories(stories)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

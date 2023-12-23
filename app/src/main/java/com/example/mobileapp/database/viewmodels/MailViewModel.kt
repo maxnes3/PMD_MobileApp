@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class MailViewModel(private val mailRepository: MailRepository): ViewModel() {
     val getAllMails: Flow<PagingData<Mail>> = mailRepository.getAllMails().cachedIn(viewModelScope)
 
-    fun getMail(id: Int):  Flow<Mail?> = mailRepository.getMail(id)
+    suspend fun getMail(id: Int):  Mail? = mailRepository.getMail(id)
 
     fun insertMail(mail: Mail) = viewModelScope.launch {
         mailRepository.insertMail(mail)

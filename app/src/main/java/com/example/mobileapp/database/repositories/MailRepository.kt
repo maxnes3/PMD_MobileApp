@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface MailRepository {
     fun getAllMails(): Flow<PagingData<Mail>>
 
-    fun getMail(id: Int):  Flow<Mail?>
+    suspend fun getMail(id: Int):  Mail?
 
     suspend fun insertMail(mail: Mail)
 

@@ -23,7 +23,7 @@ class OfflineMailRepository(private val mailDao: MailDao): MailRepository {
         ).flow
     }
 
-    override fun getMail(id: Int):  Flow<Mail?> = mailDao.getById(id)
+    override suspend fun getMail(id: Int):  Mail? = mailDao.getById(id)
 
     override suspend fun insertMail(mail: Mail) = mailDao.insert(mail)
 

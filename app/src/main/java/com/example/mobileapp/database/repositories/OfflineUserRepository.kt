@@ -2,6 +2,7 @@ package com.example.mobileapp.database.repositories
 
 import com.example.mobileapp.api.model.UserRemoteSignIn
 import com.example.mobileapp.database.dao.UserDao
+import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.entities.User
 import kotlinx.coroutines.flow.Flow
 
@@ -17,4 +18,8 @@ class OfflineUserRepository(private val userDao: UserDao): UserRepository {
     override suspend fun updateUser(user: User) = userDao.update(user)
 
     override suspend fun deleteUser(user: User) = userDao.delete(user)
+
+    suspend fun clearUsers() = userDao.deleteAll()
+    suspend fun insertUsers(users: List<User>) =
+        userDao.insert(*users.toTypedArray())
 }

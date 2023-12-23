@@ -84,17 +84,6 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
                 title.value = story.title
                 description.value = story.description
             }
-            /*storyViewModel.getStoryById(storyId).collect {
-                if (it != null) {
-                    cover.value = it.cover
-                }
-                if (it != null) {
-                    title.value = it.title
-                }
-                if (it != null) {
-                    description.value = it.description
-                }
-            }*/
         }
     }
 

@@ -36,33 +36,12 @@ fun ListStoryScreen(navController: NavHostController,
                         factory = MobileAppViewModelProvider.Factory
                     )) {
     val stories = storyViewModel.getStoriesByUserId.collectAsLazyPagingItems()
-    /*val stories = remember { mutableStateListOf<Story>() }
-    LaunchedEffect(Unit){
-        withContext(Dispatchers.IO) {
-            storyViewModel.getStoriesByUserId(GlobalUser.getInstance().getUser()?.id!!).collect {
-                stories.clear()
-                stories.addAll(it)
-            }
-        }
-    }*/
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(BackgroundItem1)
     ) {
-        /*LazyColumn(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxWidth()
-        ){
-            item {
-                addNewListItem(navController, "editstory")
-            }
-            itemsIndexed(stories){ _, item ->
-                StoryListItem(item = item, navController = navController)
-            }
-        }*/
         LazyVerticalGrid(
             columns = GridCells.Fixed(1)
         ) {

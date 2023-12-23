@@ -208,9 +208,9 @@ fun MailListItem(item: Mail, navController: NavHostController,
     }
 
     val userPhoto = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.post)) }
-    val userName = remember { mutableStateOf("") }
+    val userName = remember { mutableStateOf("UserName") }
 
-    /*LaunchedEffect(Unit){
+    LaunchedEffect(Unit){
         val user = userViewModel.getUser(item.userId)
         if (user != null) {
             userName.value = user.email
@@ -218,7 +218,7 @@ fun MailListItem(item: Mail, navController: NavHostController,
                 userPhoto.value = user.photo
             }
         }
-    }*/
+    }
 
     Card(
         modifier = Modifier
