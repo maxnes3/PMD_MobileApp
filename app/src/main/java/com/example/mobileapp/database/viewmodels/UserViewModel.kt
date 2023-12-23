@@ -3,15 +3,18 @@ package com.example.mobileapp.database.viewmodels
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mobileapp.GlobalUser
+import com.example.mobileapp.api.model.UserRemoteSignIn
+import com.example.mobileapp.api.model.toUserRemote
 import com.example.mobileapp.database.entities.User
+import com.example.mobileapp.database.repositories.OfflineUserRepository
 import com.example.mobileapp.database.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 class UserViewModel(private val userRepository: UserRepository): ViewModel() {
-    val getAllUsers = userRepository.getAllUsers()
+    //val getAllUsers = userRepository.getAllUsers()
 
-    fun getUser(id: Int): Flow<User?> = userRepository.getUser(id)
+    suspend fun getUser(id: Int): User? = userRepository.getUser(id)
 
     fun updateUser(user: User) = viewModelScope.launch {
         if (user.login.isEmpty()){
@@ -34,24 +37,20 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel() {
     }
 
     fun regUser(user: User) = viewModelScope.launch {
-        val globalUser = userRepository.getUserByLogin(user.login)
-        globalUser?.let {
+        if(user.password.isEmpty()){
             return@launch
-        } ?: run {
-            if(user.password.isEmpty()){
-                return@launch
-            }
-
-            if(user.email.isEmpty() || !isValidEmail(user.email)){
-                return@launch
-            }
-            userRepository.insertUser(user)
-            GlobalUser.getInstance().setUser(userRepository.getUserByLogin(user.login))
         }
+
+        if(user.email.isEmpty() || !isValidEmail(user.email)){
+            return@launch
+        }
+        userRepository.insertUser(user)
+        GlobalUser.getInstance().setUser(userRepository.getUserByLogin(
+            UserRemoteSignIn(user.login, user.password)))
     }
 
     fun authUser(user: User) = viewModelScope.launch {
-        val globalUser = userRepository.getUserByLogin(user.login)
+        val globalUser = userRepository.getUserByLogin(UserRemoteSignIn(user.login, user.password))
         globalUser?.let {
             if (user.password.isNotEmpty() && user.password == globalUser.password){
                 GlobalUser.getInstance().setUser(globalUser)

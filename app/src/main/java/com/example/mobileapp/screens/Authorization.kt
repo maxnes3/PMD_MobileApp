@@ -40,7 +40,7 @@ fun Authorization(navController: NavHostController,
                   userViewModel: UserViewModel = viewModel(
                       factory = MobileAppViewModelProvider.Factory
                   )) {
-    val users = userViewModel.getAllUsers.collectAsState(emptyList()).value
+    //val users = userViewModel.getAllUsers.collectAsState(emptyList()).value
 
     val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }

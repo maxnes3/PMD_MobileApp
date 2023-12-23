@@ -78,7 +78,13 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
 
     LaunchedEffect(Unit) {
         storyId?.let {
-            storyViewModel.getStoryById(storyId).collect {
+            val story = storyViewModel.getStoryById(storyId)
+            if (story != null) {
+                cover.value = story.cover
+                title.value = story.title
+                description.value = story.description
+            }
+            /*storyViewModel.getStoryById(storyId).collect {
                 if (it != null) {
                     cover.value = it.cover
                 }
@@ -88,7 +94,7 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
                 if (it != null) {
                     description.value = it.description
                 }
-            }
+            }*/
         }
     }
 

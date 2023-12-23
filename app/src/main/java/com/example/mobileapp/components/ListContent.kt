@@ -172,6 +172,7 @@ fun StoryListItem(item: Story, navController: NavHostController,
             message = "Вы уверены что хотите удалить запись?", onConfirmAction = {
                 storyViewModel.deleteStory(item)
                 showDialog.value = !showDialog.value
+                navController.navigate("story")
         }, onDismissAction = {
                 showDialog.value = !showDialog.value
         })
@@ -209,16 +210,15 @@ fun MailListItem(item: Mail, navController: NavHostController,
     val userPhoto = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.post)) }
     val userName = remember { mutableStateOf("") }
 
-    LaunchedEffect(Unit){
-        userViewModel.getUser(item.userId).collect {
-            if (it != null) {
-                userName.value = it.email
-                if (it.photo != null){
-                    userPhoto.value = it.photo
-                }
+    /*LaunchedEffect(Unit){
+        val user = userViewModel.getUser(item.userId)
+        if (user != null) {
+            userName.value = user.email
+            if (user.photo != null){
+                userPhoto.value = user.photo
             }
         }
-    }
+    }*/
 
     Card(
         modifier = Modifier

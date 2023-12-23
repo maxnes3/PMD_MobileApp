@@ -54,12 +54,24 @@ fun StoryViewScreen(navController: NavHostController, storyId: Int,
     val description = remember { mutableStateOf("") }
     val postdate = remember { mutableStateOf<Long>(0) }
 
-    val story by storyViewModel.getStoryById(storyId).collectAsState(null)
+    /*val story by storyViewModel.getStoryById(storyId).collectAsState(null)
     story?.let {
         cover.value = it.cover
         title.value = it.title
         description.value = it.description
         postdate.value = it.postdate!!
+    }*/
+
+    LaunchedEffect(Unit) {
+        storyId?.let {
+            val story = storyViewModel.getStoryById(storyId)
+            if (story != null) {
+                cover.value = story.cover
+                title.value = story.title
+                description.value = story.description
+                postdate.value = story.postdate!!
+            }
+        }
     }
 
     Column(
@@ -116,13 +128,12 @@ fun MailViewScreen(navController: NavHostController, mailId: Int,
             if (it != null) {
                 message.value = it.message
                 postdate.value = it.postdate!!
-                userViewModel.getUser(it.userId).collect {user ->
-                    if (user != null) {
-                        if(user.photo != null) {
-                            photo.value = user.photo
-                        }
-                        userName.value = user.email
+                val user = userViewModel.getUser(it.userId)
+                if (user != null) {
+                    if(user.photo != null) {
+                        photo.value = user.photo
                     }
+                    userName.value = user.email
                 }
             }
         }

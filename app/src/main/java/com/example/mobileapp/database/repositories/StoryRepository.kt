@@ -10,7 +10,7 @@ interface StoryRepository {
 
     fun getStoriesByUserId(userId: Int): Flow<PagingData<Story>>
 
-    fun getStoryById(id: Int):  Flow<Story?>
+    suspend fun getStoryById(id: Int): Story?
 
     suspend fun insertStory(story: Story)
 

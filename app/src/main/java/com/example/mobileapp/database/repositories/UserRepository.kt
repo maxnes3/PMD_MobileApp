@@ -1,14 +1,15 @@
 package com.example.mobileapp.database.repositories
 
+import com.example.mobileapp.api.model.UserRemoteSignIn
 import com.example.mobileapp.database.entities.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRepository {
     fun getAllUsers(): Flow<List<User>>
 
-    fun getUser(id: Int):  Flow<User?>
+    suspend fun getUser(id: Int):  User?
 
-    suspend fun getUserByLogin(login: String): User?
+    suspend fun getUserByLogin(user: UserRemoteSignIn): User?
 
     suspend fun insertUser(user: User)
 

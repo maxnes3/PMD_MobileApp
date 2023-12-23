@@ -16,17 +16,20 @@ interface StoryDao {
     fun getAll(): PagingSource<Int, Story>
 
     @Query("select * from stories where stories.id = :id")
-    fun getById(id: Int): Flow<Story?>
+    suspend fun getById(id: Int): Story?
 
     @Query("select * from stories where stories.user_id = :userId order by stories.id desc")
-    fun getByUserId(userId: Int): PagingSource<Int, Story>
+    fun getByUserId(userId: Int): Flow<List<Story>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(story: Story)
+    suspend fun insert(vararg story: Story)
 
     @Update
     suspend fun update(story: Story)
 
     @Delete
     suspend fun delete(story: Story)
+
+    @Query("delete from stories")
+    suspend fun deleteAll()
 }
