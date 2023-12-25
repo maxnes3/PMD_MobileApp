@@ -76,7 +76,7 @@ fun NavBar(navController: NavHostController) {
                                 textAlign = TextAlign.Center,
                                 fontFamily = FontFamily(
                                     Font(
-                                        R.font.irishgrover_regular, FontWeight.Bold
+                                        R.font.roboto_regular, FontWeight.Bold
                                     )
                                 )
                             )
