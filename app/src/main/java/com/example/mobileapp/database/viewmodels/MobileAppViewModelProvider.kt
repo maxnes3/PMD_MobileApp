@@ -17,6 +17,9 @@ object MobileAppViewModelProvider {
         initializer {
             UserViewModel(app().container.userRepository)
         }
+        initializer {
+            ReportViewModel(app().container.reportRepository)
+        }
     }
 }
 

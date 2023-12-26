@@ -46,6 +46,7 @@ import com.example.mobileapp.screens.ListStoryScreen
 import com.example.mobileapp.screens.MailViewScreen
 import com.example.mobileapp.screens.MainScreen
 import com.example.mobileapp.screens.Registration
+import com.example.mobileapp.screens.ReportScreen
 import com.example.mobileapp.screens.SettingsScreen
 import com.example.mobileapp.screens.StoryViewScreen
 
@@ -200,6 +201,11 @@ fun NavBar(navController: NavHostController) {
                     bottomBarState.value = false
                     MailViewScreen(navController = navController, mailId = it.getInt("id"))
                 }
+            }
+            composable("report"){
+                topBarState.value = false
+                bottomBarState.value = false
+                ReportScreen(navController = navController)
             }
         }
     }
