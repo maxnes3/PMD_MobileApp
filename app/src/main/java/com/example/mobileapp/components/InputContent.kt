@@ -1,5 +1,8 @@
 package com.example.mobileapp.components
 
+import android.app.DatePickerDialog
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,15 +22,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mobileapp.ui.theme.ButtonColor2
 import com.example.mobileapp.ui.theme.MobileAppTheme
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 val buttonHeightStandard = 72.dp
 
@@ -160,6 +169,52 @@ fun ActiveButton(label: String, backgroundColor: Color, textColor: Color, onClic
             fontWeight = FontWeight.Bold,
             color = textColor
         )
+    }
+}
+
+@Composable
+fun DatePicker(startValue: Long? = null, onDateSelected: (Long) -> Unit) {
+    val context = LocalContext.current
+
+    val calendar = Calendar.getInstance()
+    val year = calendar.get(Calendar.YEAR)
+    val month = calendar.get(Calendar.MONTH)
+    val day = calendar.get(Calendar.DAY_OF_MONTH)
+
+    val dateFormatter = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
+    val selectedDate = remember { mutableStateOf<Long>(0) }
+
+    startValue?.let {
+        selectedDate.value = startValue
+    }
+
+    val datePickerDialog = remember { mutableStateOf(DatePickerDialog(context)) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Selected Date: ${dateFormatter.format(selectedDate.value)}")
+        ActiveButton(label = "Выбрать дату", backgroundColor = ButtonColor2,
+            textColor = Color.White, onClickAction = {
+                datePickerDialog.value = DatePickerDialog(
+                    context,
+                    { _, year: Int, month: Int, dayOfMonth: Int ->
+                        val selectedDateInMillis = Calendar.getInstance().apply {
+                            set(year, month, dayOfMonth)
+                        }.timeInMillis
+
+                        selectedDate.value = selectedDateInMillis
+                        onDateSelected(selectedDateInMillis)
+                    },
+                    year,
+                    month,
+                    day
+                )
+                datePickerDialog.value.show()
+        })
     }
 }
 

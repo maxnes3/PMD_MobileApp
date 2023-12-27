@@ -281,7 +281,7 @@ fun addNewListItem(navController: NavHostController, destination: String){
             },
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = BackgroundItem2
+            containerColor = Color.White
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 8.dp
@@ -304,7 +304,9 @@ fun addNewListItem(navController: NavHostController, destination: String){
                     text = "Добавить",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(start = 32.dp))
+                    modifier = Modifier.padding(start = 32.dp),
+                    color = Color.Black
+                )
             }
         }
     }

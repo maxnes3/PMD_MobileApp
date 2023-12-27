@@ -22,6 +22,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -53,8 +54,9 @@ import com.example.mobileapp.screens.StoryViewScreen
 val navBarItems = listOf(
     NavBarItem(route = "main", label = "Главная", icon = R.drawable.home),
     NavBarItem(route = "story", label = "Создание", icon = R.drawable.edit),
-    NavBarItem(route = "mail", label = "Уведомления", icon = R.drawable.mail),
-    NavBarItem(route = "settings", label = "Настройки", icon = R.drawable.settings),
+    NavBarItem(route = "mail", label = "Почта", icon = R.drawable.mail),
+    NavBarItem(route = "report", label = "Отчёт", icon = R.drawable.report),
+    NavBarItem(route = "settings", label = "Настройки", icon = R.drawable.settings)
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,8 +71,10 @@ fun NavBar(navController: NavHostController) {
                 visible = topBarState.value,
                 enter = slideInVertically(initialOffsetY = { it }),
                 exit = slideOutVertically(targetOffsetY = { it }),
+
                 content = {
                     TopAppBar(
+                        modifier = Modifier.fillMaxWidth(),
                         title = {
                             Text(
                                 text = "Storyteller!",
@@ -79,7 +83,8 @@ fun NavBar(navController: NavHostController) {
                                     Font(
                                         R.font.roboto_regular, FontWeight.Bold
                                     )
-                                )
+                                ),
+                                color = Color.Black
                             )
                         }
                     )
@@ -204,8 +209,8 @@ fun NavBar(navController: NavHostController) {
             }
             composable("report"){
                 topBarState.value = false
-                bottomBarState.value = false
-                ReportScreen(navController = navController)
+                bottomBarState.value = true
+                ReportScreen()
             }
         }
     }

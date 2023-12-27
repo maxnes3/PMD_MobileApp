@@ -14,8 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -34,6 +32,7 @@ import com.example.mobileapp.R
 import com.example.mobileapp.components.NavigationButton
 import com.example.mobileapp.database.viewmodels.MailViewModel
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
+import com.example.mobileapp.database.viewmodels.ReportViewModel
 import com.example.mobileapp.database.viewmodels.StoryViewModel
 import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.ButtonColor2

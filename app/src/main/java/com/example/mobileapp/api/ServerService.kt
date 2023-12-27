@@ -1,6 +1,7 @@
 package com.example.mobileapp.api
 
 import com.example.mobileapp.api.model.MailRemote
+import com.example.mobileapp.api.model.ReportRemote
 import com.example.mobileapp.api.model.StoryRemote
 import com.example.mobileapp.api.model.UserRemote
 import com.example.mobileapp.api.model.UserRemoteSignIn
@@ -104,6 +105,13 @@ interface ServerService {
     suspend fun deleteMail(
         @Path("id") id: Int
     )
+
+    //REPORT
+    @GET("report/createReport/{dateFrom}/{dateTo}")
+    suspend fun createReport(
+        @Path("dateFrom") dateFrom: Long,
+        @Path("dateTo") dateTo: Long
+    ): ReportRemote
 
     //INSTANCE
     companion object {
