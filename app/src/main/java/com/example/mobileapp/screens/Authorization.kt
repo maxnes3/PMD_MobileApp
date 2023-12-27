@@ -1,5 +1,6 @@
 package com.example.mobileapp.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,12 +24,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
+import com.example.mobileapp.api.ApiStatus
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
 import com.example.mobileapp.components.PasswordInputField
 import com.example.mobileapp.components.PlaceholderInputField
 import com.example.mobileapp.database.MobileAppDataBase
 import com.example.mobileapp.database.entities.User
+import com.example.mobileapp.database.viewmodels.LoadingScreen
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
 import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.ButtonColor1
@@ -41,49 +44,63 @@ fun Authorization(navController: NavHostController,
                   userViewModel: UserViewModel = viewModel(
                       factory = MobileAppViewModelProvider.Factory
                   )) {
-    val isAuthorizated = remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
-    if(GlobalUser.getInstance().getUser() != null && !isAuthorizated.value) {
-        isAuthorizated.value = !isAuthorizated.value
-        navController.navigate("main")
+    when(userViewModel.apiStatus){
+        ApiStatus.DONE -> {
+            navController.navigate("main")
+            userViewModel.clearStatus()
+        }
+        ApiStatus.LOADING -> LoadingScreen(ButtonColor2)
+        ApiStatus.ERROR -> Toast.makeText(context, "Не верные данные или пользователя не существует: "
+                + userViewModel.apiError, Toast.LENGTH_SHORT).show()
+        else -> {}
     }
 
     val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 8.dp),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Image(
-            painter = painterResource(id = R.drawable.login),
-            contentDescription = "login",
-            contentScale = ContentScale.Crop,
+    if(userViewModel.apiStatus != ApiStatus.LOADING) {
+        Column(
             modifier = Modifier
-                .size(448.dp)
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally))
-        PlaceholderInputField(label = "Логин", isSingleLine = true, onTextChanged = {newlogin ->
-            login.value = newlogin
-        })
-        PasswordInputField(label = "Пароль", onPasswordChanged = {newpassword ->
-            password.value = newpassword
-        })
-        ActiveButton(label = "Вход", backgroundColor = ButtonColor2,
-            textColor = Color.White, onClickAction = {
-                if (login.value.isNotEmpty() && password.value.isNotEmpty()) {
-                    userViewModel.authUser(
-                        User(
-                            login = login.value,
-                            password = password.value,
-                            email = String()
+                .fillMaxSize()
+                .padding(bottom = 8.dp),
+            verticalArrangement = Arrangement.Bottom
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.login),
+                contentDescription = "login",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(448.dp)
+                    .padding(8.dp)
+                    .align(Alignment.CenterHorizontally)
+            )
+            PlaceholderInputField(
+                label = "Логин",
+                isSingleLine = true,
+                onTextChanged = { newlogin ->
+                    login.value = newlogin
+                })
+            PasswordInputField(label = "Пароль", onPasswordChanged = { newpassword ->
+                password.value = newpassword
+            })
+            ActiveButton(label = "Вход", backgroundColor = ButtonColor2,
+                textColor = Color.White, onClickAction = {
+                    if (login.value.isNotEmpty() && password.value.isNotEmpty()) {
+                        userViewModel.authUser(
+                            User(
+                                login = login.value,
+                                password = password.value,
+                                email = String()
+                            )
                         )
-                    )
-                }
-        })
-        NavigationButton(navController = navController, destination = "registration", label = "Регистрация",
-            backgroundColor = ButtonColor1, textColor = Color.Black)
+                    }
+                })
+            NavigationButton(
+                navController = navController, destination = "registration", label = "Регистрация",
+                backgroundColor = ButtonColor1, textColor = Color.Black
+            )
+        }
     }
 }

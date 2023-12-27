@@ -352,16 +352,3 @@ fun DialogWindow(label: String, message: String, onConfirmAction: () -> Unit, on
         }
     )
 }
-
-@Composable
-fun LoadingScreen() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        CircularProgressIndicator()
-    }
-}

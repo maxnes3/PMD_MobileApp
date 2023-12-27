@@ -11,7 +11,7 @@ import com.example.mobileapp.database.repositories.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class UserViewModel(private val userRepository: UserRepository): ViewModel() {
+class UserViewModel(private val userRepository: UserRepository): CustomViewModel() {
     //val getAllUsers = userRepository.getAllUsers()
 
     suspend fun getUser(id: Int): User? = userRepository.getUser(id)
@@ -28,8 +28,12 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel() {
         if (user.password.isEmpty()){
             return@launch
         }
-        userRepository.updateUser(user)
-        GlobalUser.getInstance().setUser(user)
+        runInScope(
+            actionSuccess = {
+                userRepository.updateUser(user)
+                GlobalUser.getInstance().setUser(user)
+            }
+        )
     }
 
     fun deleteUser(user: User) = viewModelScope.launch {
@@ -44,18 +48,38 @@ class UserViewModel(private val userRepository: UserRepository): ViewModel() {
         if(user.email.isEmpty() || !isValidEmail(user.email)){
             return@launch
         }
-        userRepository.insertUser(user)
+        runInScope(
+            actionSuccess = {
+                userRepository.insertUser(user)
+                GlobalUser.getInstance().setUser(userRepository.getUserByLogin(
+                    UserRemoteSignIn(user.login, user.password)))
+            }
+        )
+        /*userRepository.insertUser(user)
         GlobalUser.getInstance().setUser(userRepository.getUserByLogin(
-            UserRemoteSignIn(user.login, user.password)))
+            UserRemoteSignIn(user.login, user.password)))*/
     }
 
     fun authUser(user: User) = viewModelScope.launch {
-        val globalUser = userRepository.getUserByLogin(UserRemoteSignIn(user.login, user.password))
+        runInScope(
+            actionSuccess = {
+                val globalUser = userRepository.getUserByLogin(UserRemoteSignIn(user.login, user.password))
+                globalUser?.let {
+                    if (user.password.isNotEmpty() && user.password == globalUser.password){
+                        GlobalUser.getInstance().setUser(globalUser)
+                    }
+                }
+            },
+            actionError = {
+                GlobalUser.getInstance().setUser(null)
+            }
+        )
+        /*val globalUser = userRepository.getUserByLogin(UserRemoteSignIn(user.login, user.password))
         globalUser?.let {
             if (user.password.isNotEmpty() && user.password == globalUser.password){
                 GlobalUser.getInstance().setUser(globalUser)
             }
-        }
+        }*/
     }
 
     private fun isValidEmail(email: String): Boolean {

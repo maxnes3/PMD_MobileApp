@@ -13,9 +13,11 @@ class RemoteConverters {
         fun fromBitmap(bitmap: Bitmap): String {
             val outputStream = ByteArrayOutputStream()
 
+            val extendedBitmap = scaleRatioBitmap(bitmap)
+
             // Сжимаем изображение до указанного максимального размера
-            val quality = calculateQuality(bitmap)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            val quality = calculateQuality(extendedBitmap)
+            extendedBitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
 
             val byteArray = outputStream.toByteArray()
             return Base64.encodeToString(byteArray, Base64.NO_WRAP)
@@ -28,8 +30,6 @@ class RemoteConverters {
 
         private fun calculateQuality(bitmap: Bitmap): Int {
             val outputStream = ByteArrayOutputStream()
-            /*bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            val initialSize = outputStream.size()*/
 
             // Уменьшаем качество изображения, пока его размер не станет меньше максимального
             var quality = 100
@@ -41,6 +41,22 @@ class RemoteConverters {
 
             // Возвращаем качество, при котором размер изображения удовлетворяет ограничению
             return if (quality < 0) 0 else quality
+        }
+
+        private fun scaleRatioBitmap(bitmap: Bitmap): Bitmap {
+            val maxWidth = 990
+            val maxHeight = 990
+            if (bitmap.width > maxWidth || bitmap.height > maxHeight) {
+                // Если размер превышает максимальный, масштабируем изображение
+                val ratio = Math.min(maxWidth.toFloat() / bitmap.width,
+                    maxHeight.toFloat() / bitmap.height)
+
+                val width = (ratio * bitmap.width).toInt()
+                val height = (ratio * bitmap.height).toInt()
+
+                return Bitmap.createScaledBitmap(bitmap, width, height, true)
+            }
+            return bitmap
         }
     }
 }

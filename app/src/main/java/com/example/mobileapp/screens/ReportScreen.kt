@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -37,6 +38,18 @@ fun ReportScreen(
             .fillMaxWidth(),
         verticalArrangement = Arrangement.Center
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = "Отчёт по публикациям:",
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier
+                    .padding(top = 16.dp, bottom = 16.dp, start = 8.dp, end = 8.dp))
+        }
         if(reportViewModel.report.value == null) {
             DatePicker(startValue = dateFrom.value, onDateSelected = { newDateFrom ->
                 dateFrom.value = newDateFrom
@@ -50,13 +63,9 @@ fun ReportScreen(
                 })
         }
         else{
-            Text(text = "Отчёт по публикациям иллюстраций",
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier
-                    .padding(8.dp))
             Text(text = "Дата с ${dateFormat.format(reportViewModel.report.value?.dateFrom?.let { Date(it) })}",
                 fontSize = 20.sp,
+                textAlign = TextAlign.Center,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
                     .padding(8.dp))

@@ -6,6 +6,7 @@ import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -44,12 +45,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
+import com.example.mobileapp.api.ApiStatus
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
 import com.example.mobileapp.components.PlaceholderInputField
 import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.entities.User
+import com.example.mobileapp.database.viewmodels.LoadingScreen
 import com.example.mobileapp.database.viewmodels.MailViewModel
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
 import com.example.mobileapp.database.viewmodels.StoryViewModel
@@ -207,6 +210,16 @@ fun EditUserScreen(navController: NavHostController,
                        factory = MobileAppViewModelProvider.Factory
                    )) {
     val context = LocalContext.current
+    when(userViewModel.apiStatus){
+        ApiStatus.DONE -> {
+            navController.navigate("settings")
+            userViewModel.clearStatus()
+        }
+        ApiStatus.LOADING -> LoadingScreen(ButtonColor2)
+        ApiStatus.ERROR -> Toast.makeText(context, "Не удалось обновить данные пользователя: "
+                + userViewModel.apiError, Toast.LENGTH_SHORT).show()
+        else -> {}
+    }
 
     var userId = remember { mutableStateOf(0) }
     val photo = remember { mutableStateOf<Bitmap>(BitmapFactory.decodeResource(context.resources, R.drawable.photoplaceholder)) }
@@ -241,65 +254,76 @@ fun EditUserScreen(navController: NavHostController,
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(bottom = 8.dp)
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Bottom
-    ) {
-        Box(
+    if(userViewModel.apiStatus != ApiStatus.LOADING) {
+        Column(
             modifier = Modifier
-                .size(512.dp),
-            contentAlignment = Alignment.Center
+                .fillMaxSize()
+                .padding(bottom = 8.dp)
+                .verticalScroll(rememberScrollState()),
+            verticalArrangement = Arrangement.Bottom
         ) {
-            Image(
-                bitmap = photo.value.asImageBitmap(),
-                contentDescription = "Background Image",
-                contentScale = ContentScale.Crop,
+            Box(
                 modifier = Modifier
-                    .size(512.dp)
-                    .blur(12.dp),
-                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }))
-            Image(
-                bitmap = photo.value.asImageBitmap(),
-                contentDescription = "editplaceholder",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .padding(8.dp)
-                    .clip(CircleShape)
-                    .size(384.dp))
-        }
-        ActiveButton(label = "Выбрать фото", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
-            launcher.launch("image/*")
-        })
-        PlaceholderInputField(label = "Никнейм", isSingleLine = true,
-            startValue = login.value, onTextChanged = { newLogin ->
-                login.value = newLogin
-            })
-        PlaceholderInputField(label = "Пароль", isSingleLine = true,
-            startValue = password.value, onTextChanged = { newPassword ->
-                password.value = newPassword
-            })
-        PlaceholderInputField(label = "Почта", isSingleLine = true,
-            startValue = email.value, onTextChanged = { newEmail ->
-                email.value = newEmail
-            })
-        ActiveButton(label = "Сохранить", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
-            userViewModel.updateUser(
-                User(
-                    id = userId.value,
-                    login = login.value,
-                    password = password.value,
-                    email = email.value,
-                    photo = photo.value
+                    .size(512.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Image(
+                    bitmap = photo.value.asImageBitmap(),
+                    contentDescription = "Background Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(512.dp)
+                        .blur(12.dp),
+                    colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) })
                 )
-            )
-            navController.navigate("settings")
-        })
-        ActiveButton(label = "Назад", backgroundColor = ButtonColor2, textColor = Color.White,
-            onClickAction = {
-                navController.navigate("settings")
-        })
+                Image(
+                    bitmap = photo.value.asImageBitmap(),
+                    contentDescription = "editplaceholder",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .clip(CircleShape)
+                        .size(384.dp)
+                )
+            }
+            ActiveButton(
+                label = "Выбрать фото",
+                backgroundColor = ButtonColor1,
+                textColor = Color.Black,
+                onClickAction = {
+                    launcher.launch("image/*")
+                })
+            PlaceholderInputField(label = "Никнейм", isSingleLine = true,
+                startValue = login.value, onTextChanged = { newLogin ->
+                    login.value = newLogin
+                })
+            PlaceholderInputField(label = "Пароль", isSingleLine = true,
+                startValue = password.value, onTextChanged = { newPassword ->
+                    password.value = newPassword
+                })
+            PlaceholderInputField(label = "Почта", isSingleLine = true,
+                startValue = email.value, onTextChanged = { newEmail ->
+                    email.value = newEmail
+                })
+            ActiveButton(
+                label = "Сохранить",
+                backgroundColor = ButtonColor1,
+                textColor = Color.Black,
+                onClickAction = {
+                    userViewModel.updateUser(
+                        User(
+                            id = userId.value,
+                            login = login.value,
+                            password = password.value,
+                            email = email.value,
+                            photo = photo.value
+                        )
+                    )
+                })
+            ActiveButton(label = "Назад", backgroundColor = ButtonColor2, textColor = Color.White,
+                onClickAction = {
+                    navController.navigate("settings")
+                })
+        }
     }
 }
