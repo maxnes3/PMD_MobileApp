@@ -5,11 +5,13 @@ import android.graphics.BitmapFactory
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,8 +20,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -32,7 +37,6 @@ import com.example.mobileapp.R
 import com.example.mobileapp.components.NavigationButton
 import com.example.mobileapp.database.viewmodels.MailViewModel
 import com.example.mobileapp.database.viewmodels.MobileAppViewModelProvider
-import com.example.mobileapp.database.viewmodels.ReportViewModel
 import com.example.mobileapp.database.viewmodels.StoryViewModel
 import com.example.mobileapp.database.viewmodels.UserViewModel
 import com.example.mobileapp.ui.theme.ButtonColor2
@@ -53,14 +57,6 @@ fun StoryViewScreen(navController: NavHostController, storyId: Int,
     val description = remember { mutableStateOf("") }
     val postdate = remember { mutableStateOf<Long>(0) }
 
-    /*val story by storyViewModel.getStoryById(storyId).collectAsState(null)
-    story?.let {
-        cover.value = it.cover
-        title.value = it.title
-        description.value = it.description
-        postdate.value = it.postdate!!
-    }*/
-
     LaunchedEffect(Unit) {
         storyId?.let {
             val story = storyViewModel.getStoryById(storyId)
@@ -79,14 +75,28 @@ fun StoryViewScreen(navController: NavHostController, storyId: Int,
             .padding(bottom = 8.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            bitmap = cover.value.asImageBitmap(),
-            contentDescription = "cover",
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
-                .size(512.dp)
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally))
+                .size(512.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                bitmap = cover.value.asImageBitmap(),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(512.dp)
+                    .blur(12.dp),
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }))
+            Image(
+                bitmap = cover.value.asImageBitmap(),
+                contentDescription = "cover",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(384.dp)
+                    .clip(RoundedCornerShape(16.dp)))
+        }
         Text(text = "Название: ${title.value}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
@@ -143,19 +153,28 @@ fun MailViewScreen(navController: NavHostController, mailId: Int,
             .padding(bottom = 8.dp),
         verticalArrangement = Arrangement.Center
     ) {
-        Image(
-            bitmap = photo.value.asImageBitmap(),
-            contentDescription = "editplaceholder",
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
-                .padding(8.dp)
-                .clip(CircleShape)
-                .size(384.dp)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-                .align(Alignment.CenterHorizontally))
+                .size(512.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                bitmap = photo.value.asImageBitmap(),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(512.dp)
+                    .blur(12.dp),
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }))
+            Image(
+                bitmap = photo.value.asImageBitmap(),
+                contentDescription = "editplaceholder",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clip(CircleShape)
+                    .size(384.dp))
+        }
         Text(text = "Автор: ${userName.value}",
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,

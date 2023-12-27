@@ -8,14 +8,19 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,8 +30,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -90,17 +98,32 @@ fun EditStoryScreen(navController: NavHostController, storyId: Int? = null,
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 8.dp),
-        verticalArrangement = Arrangement.Bottom
+            .padding(bottom = 8.dp)
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Bottom,
     ) {
-        Image(
-            bitmap = cover.value.asImageBitmap(),
-            contentDescription = "editplaceholder",
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
-                .size(384.dp)
-                .padding(8.dp)
-                .align(Alignment.CenterHorizontally))
+                .size(512.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                bitmap = cover.value.asImageBitmap(),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(512.dp)
+                    .blur(12.dp),
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }))
+            Image(
+                bitmap = cover.value.asImageBitmap(),
+                contentDescription = "cover",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(384.dp)
+                    .clip(RoundedCornerShape(16.dp)))
+        }
         ActiveButton(label = "Выбрать обложку", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
             launcher.launch("image/*")
         })
@@ -221,22 +244,32 @@ fun EditUserScreen(navController: NavHostController,
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = 8.dp),
+            .padding(bottom = 8.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Bottom
     ) {
-        Image(
-            bitmap = photo.value.asImageBitmap(),
-            contentDescription = "editplaceholder",
-            contentScale = ContentScale.Crop,
+        Box(
             modifier = Modifier
-                .padding(8.dp)
-                .clip(CircleShape)
-                .size(384.dp)
-                .border(
-                    width = 2.dp,
-                    color = MaterialTheme.colorScheme.onPrimary,
-                )
-                .align(Alignment.CenterHorizontally))
+                .size(512.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                bitmap = photo.value.asImageBitmap(),
+                contentDescription = "Background Image",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(512.dp)
+                    .blur(12.dp),
+                colorFilter = ColorFilter.colorMatrix(ColorMatrix().apply { setToSaturation(0f) }))
+            Image(
+                bitmap = photo.value.asImageBitmap(),
+                contentDescription = "editplaceholder",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .clip(CircleShape)
+                    .size(384.dp))
+        }
         ActiveButton(label = "Выбрать фото", backgroundColor = ButtonColor1, textColor = Color.Black, onClickAction = {
             launcher.launch("image/*")
         })

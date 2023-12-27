@@ -21,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
@@ -40,7 +41,12 @@ fun Authorization(navController: NavHostController,
                   userViewModel: UserViewModel = viewModel(
                       factory = MobileAppViewModelProvider.Factory
                   )) {
-    //val users = userViewModel.getAllUsers.collectAsState(emptyList()).value
+    val isAuthorizated = remember { mutableStateOf(false) }
+
+    if(GlobalUser.getInstance().getUser() != null && !isAuthorizated.value) {
+        isAuthorizated.value = !isAuthorizated.value
+        navController.navigate("main")
+    }
 
     val login = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -75,7 +81,6 @@ fun Authorization(navController: NavHostController,
                             email = String()
                         )
                     )
-                    navController.navigate("main")
                 }
         })
         NavigationButton(navController = navController, destination = "registration", label = "Регистрация",

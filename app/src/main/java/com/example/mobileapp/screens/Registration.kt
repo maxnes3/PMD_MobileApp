@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.R
 import com.example.mobileapp.components.ActiveButton
 import com.example.mobileapp.components.NavigationButton
@@ -33,6 +34,13 @@ fun Registration(navController: NavHostController,
                  userViewModel: UserViewModel = viewModel(
                      factory = MobileAppViewModelProvider.Factory
                  )) {
+    val isRegistrated = remember { mutableStateOf(false) }
+
+    if(GlobalUser.getInstance().getUser() != null && !isRegistrated.value) {
+        isRegistrated.value = !isRegistrated.value
+        navController.navigate("main")
+    }
+
     val login = remember { mutableStateOf("") }
     val email = remember { mutableStateOf("") }
     val password = remember { mutableStateOf("") }
@@ -75,7 +83,6 @@ fun Registration(navController: NavHostController,
                         )
                     )
                 }
-                navController.navigate("main")
         })
         NavigationButton(navController = navController, destination = "authorization",
             label = "Назад", backgroundColor = ButtonColor1, textColor = Color.Black)

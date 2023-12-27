@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
 import com.example.mobileapp.components.NavBar
@@ -31,14 +32,14 @@ class MainActivity : ComponentActivity() {
 }
 
 class GlobalUser private constructor() {
-    private var user: User? = null
+    private var user = mutableStateOf<User?>(null)
 
     fun setUser(user: User?) {
-        this.user = user
+        this.user.value = user
     }
 
     fun getUser(): User? {
-        return user
+        return user.value
     }
 
     companion object {
