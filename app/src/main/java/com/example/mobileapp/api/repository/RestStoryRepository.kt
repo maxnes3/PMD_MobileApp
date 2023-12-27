@@ -8,19 +8,16 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.mobileapp.MobileAppContainer
 import com.example.mobileapp.api.ServerService
-import com.example.mobileapp.api.ServiceRemoteMediator
-import com.example.mobileapp.api.model.toMail
+import com.example.mobileapp.api.StoryRemoteMediator
 import com.example.mobileapp.api.model.toStory
 import com.example.mobileapp.api.model.toStoryRemote
 import com.example.mobileapp.database.MobileAppDataBase
-import com.example.mobileapp.database.entities.Mail
 import com.example.mobileapp.database.entities.Story
 import com.example.mobileapp.database.repositories.OfflineStoryRepository
 import com.example.mobileapp.database.repositories.OfflineUserRepository
 import com.example.mobileapp.database.repositories.RemoteKeysRepositoryImpl
 import com.example.mobileapp.database.repositories.StoryRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 class RestStoryRepository(private var service: ServerService,
                           private val dbStoryRepository: OfflineStoryRepository,
@@ -30,7 +27,7 @@ class RestStoryRepository(private var service: ServerService,
 ): StoryRepository {
 
     override fun getAllStories(): Flow<PagingData<Story>> {
-        val pagingSourceFactory = {
+        /*val pagingSourceFactory = {
             dbStoryRepository.getAllStoriesPagingSource()
         }
 
@@ -40,7 +37,36 @@ class RestStoryRepository(private var service: ServerService,
                 pageSize = MobileAppContainer.LIMIT,
                 enablePlaceholders = false
             ),
-            remoteMediator = ServiceRemoteMediator(
+            remoteMediator = StoryRemoteMediator(
+                service,
+                dbStoryRepository,
+                dbUserRepository,
+                database,
+                dbRemoteKeyRepository,
+            ),
+            pagingSourceFactory = pagingSourceFactory
+        ).flow*/
+        return Pager(
+            config = PagingConfig(
+                pageSize = MobileAppContainer.LIMIT,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { StoryPagingSource(service) }
+        ).flow
+    }
+
+    override fun getStoriesByUserId(userId: Int): Flow<PagingData<Story>> {
+        val pagingSourceFactory = {
+            dbStoryRepository.getUserStoriesPagingSource(userId)
+        }
+
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = MobileAppContainer.LIMIT,
+                enablePlaceholders = false
+            ),
+            remoteMediator = StoryRemoteMediator(
                 service,
                 dbStoryRepository,
                 dbUserRepository,
@@ -54,18 +80,8 @@ class RestStoryRepository(private var service: ServerService,
                 pageSize = MobileAppContainer.LIMIT,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { StoryPagingSource(service) }
-        ).flow*/
-    }
-
-    override fun getStoriesByUserId(userId: Int): Flow<PagingData<Story>> {
-        return Pager(
-            config = PagingConfig(
-                pageSize = MobileAppContainer.LIMIT,
-                enablePlaceholders = false
-            ),
             pagingSourceFactory = { StoryPagingSource(service, userId) }
-        ).flow
+        ).flow*/
     }
 
     override suspend fun getStoryById(id: Int): Story? = service.getStory(id).toStory()

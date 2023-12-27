@@ -32,7 +32,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mobileapp.ui.theme.ButtonColor2
+import com.example.mobileapp.ui.theme.ButtonColor1
 import com.example.mobileapp.ui.theme.MobileAppTheme
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -197,8 +197,8 @@ fun DatePicker(startValue: Long? = null, onDateSelected: (Long) -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Selected Date: ${dateFormatter.format(selectedDate.value)}")
-        ActiveButton(label = "Выбрать дату", backgroundColor = ButtonColor2,
-            textColor = Color.White, onClickAction = {
+        ActiveButton(label = "Выбрать дату", backgroundColor = ButtonColor1,
+            textColor = Color.Black, onClickAction = {
                 datePickerDialog.value = DatePickerDialog(
                     context,
                     { _, year: Int, month: Int, dayOfMonth: Int ->

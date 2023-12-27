@@ -25,7 +25,18 @@ class OfflineStoryRepository(private val storyDao: StoryDao): StoryRepository {
     }
 
     override fun getStoriesByUserId(userId: Int): Flow<PagingData<Story>> {
-        TODO("Not yet implemented")
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5,
+                prefetchDistance = 1,
+                enablePlaceholders = true,
+                initialLoadSize = 10,
+                maxSize = 15
+            ),
+            pagingSourceFactory = {
+                storyDao.getByUserId(userId)
+            }
+        ).flow
     }
 
     override suspend fun getStoryById(id: Int): Story? = storyDao.getById(id)
@@ -41,4 +52,6 @@ class OfflineStoryRepository(private val storyDao: StoryDao): StoryRepository {
         storyDao.insert(*stories.toTypedArray())
 
     fun getAllStoriesPagingSource(): PagingSource<Int, Story> = storyDao.getAll()
+
+    fun getUserStoriesPagingSource(userId: Int): PagingSource<Int, Story> = storyDao.getByUserId(userId)
 }

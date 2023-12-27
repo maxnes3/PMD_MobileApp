@@ -5,6 +5,7 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
+import com.example.mobileapp.GlobalUser
 import com.example.mobileapp.api.model.toStory
 import com.example.mobileapp.api.model.toUser
 import com.example.mobileapp.database.MobileAppDataBase
@@ -18,11 +19,11 @@ import retrofit2.HttpException
 import java.io.IOException
 
 @OptIn(ExperimentalPagingApi::class)
-class ServiceRemoteMediator(private val service: ServerService,
-                            private val storyRepository: OfflineStoryRepository,
-                            private val userRepository: OfflineUserRepository,
-                            private val database: MobileAppDataBase,
-                            private val dbRemoteKeyRepository: RemoteKeysRepositoryImpl
+class StoryRemoteMediator(private val service: ServerService,
+                          private val storyRepository: OfflineStoryRepository,
+                          private val userRepository: OfflineUserRepository,
+                          private val database: MobileAppDataBase,
+                          private val dbRemoteKeyRepository: RemoteKeysRepositoryImpl
 ) : RemoteMediator<Int, Story>() {
     override suspend fun initialize(): InitializeAction {
         return InitializeAction.LAUNCH_INITIAL_REFRESH
@@ -51,8 +52,8 @@ class ServiceRemoteMediator(private val service: ServerService,
         }
 
         try {
-            val users = service.getUsers().map { it.toUser() }
-            val stories = service.getStories(page, state.config.pageSize).map { it.toStory() }
+            val user = GlobalUser.getInstance().getUser()
+            val stories = service.getUserStories(page, state.config.pageSize, user!!.id!!).map { it.toStory() }
             val endOfPaginationReached = stories.isEmpty()
             database.withTransaction {
                 if (loadType == LoadType.REFRESH) {
@@ -71,7 +72,7 @@ class ServiceRemoteMediator(private val service: ServerService,
                     )
                 }
                 dbRemoteKeyRepository.createRemoteKeys(keys)
-                userRepository.insertUsers(users)
+                userRepository.insertUser(user)
                 storyRepository.insertStories(stories)
             }
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

@@ -19,7 +19,7 @@ interface StoryDao {
     suspend fun getById(id: Int): Story?
 
     @Query("select * from stories where stories.user_id = :userId order by stories.id desc")
-    fun getByUserId(userId: Int): Flow<List<Story>>
+    fun getByUserId(userId: Int): PagingSource<Int, Story>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(vararg story: Story)
