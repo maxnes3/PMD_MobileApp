@@ -210,7 +210,7 @@ fun NavBar(navController: NavHostController) {
             composable("report"){
                 topBarState.value = false
                 bottomBarState.value = true
-                ReportScreen()
+                ReportScreen(navController = navController)
             }
         }
     }

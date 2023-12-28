@@ -7,6 +7,7 @@ data class ReportRemote(
     val dateFrom: Long,
     val dateTo: Long,
     val postCount: Int,
-    val mostPostAuthor: String,
-    val mostPostCount: Int
+    val mostPostAuthor: UserRemote,
+    val mostPostCount: Int,
+    val listPostAuthor: List<StoryRemote>
 )
